@@ -54,6 +54,8 @@ type PlayerCharacter = {
   classItem: string;
   items: Item["name"][];
   abilities: Ability["name"][];
+  experiences: Experience[];
+  connections: string[];
 };
 
 const BOLD = /\*\*(.+?)\*\*/g;
@@ -121,6 +123,8 @@ export default function Create() {
     classItem: classes[0].classItems[0],
     items: [],
     abilities: [],
+    experiences: [],
+    connections: [],
   });
 
   const getData = createMemo(() => {
@@ -223,13 +227,79 @@ export default function Create() {
     console.log(JSON.parse(JSON.stringify(state)));
   });
 
-  const getExperiences = (): readonly Experience[] => [
-    {
-      name: "Example Experience",
-      bonus: 2,
-    },
-  ];
-  const getConnections = (): readonly string[] => ["Example connection."];
+  function onAddExperience(_event: Targeted<HTMLElement>): void {
+    setState(
+      produce((state) => {
+        state.experiences.push({ name: "", bonus: 0 });
+      }),
+    );
+  }
+
+  function onRemoveExperience(
+    index: number,
+    _event: Targeted<HTMLElement>,
+  ): void {
+    setState(
+      produce((state) => {
+        state.experiences.splice(index, 1);
+      }),
+    );
+  }
+
+  function onSetExperienceName(
+    index: number,
+    event: Targeted<HTMLInputElement>,
+  ): void {
+    const { value } = event.currentTarget;
+    setState(
+      produce((state) => {
+        state.experiences[index].name = value;
+      }),
+    );
+  }
+
+  function onSetExperienceBonus(
+    index: number,
+    event: Targeted<HTMLInputElement>,
+  ): void {
+    const { valueAsNumber } = event.currentTarget;
+    setState(
+      produce((state) => {
+        state.experiences[index].bonus = valueAsNumber;
+      }),
+    );
+  }
+
+  function onAddConnection(_event: Targeted<HTMLElement>): void {
+    setState(
+      produce((state) => {
+        state.connections.push("");
+      }),
+    );
+  }
+
+  function onRemoveConnection(
+    index: number,
+    _event: Targeted<HTMLElement>,
+  ): void {
+    setState(
+      produce((state) => {
+        state.connections.splice(index, 1);
+      }),
+    );
+  }
+
+  function onSetConnection(
+    index: number,
+    event: Targeted<HTMLInputElement>,
+  ): void {
+    const { value } = event.currentTarget;
+    setState(
+      produce((state) => {
+        state.connections[index] = value;
+      }),
+    );
+  }
 
   return (
     <article>
@@ -604,11 +674,12 @@ export default function Create() {
           <header>
             <strong>Step 7</strong>
             <h2>
-              Create Your Experiences <HTMLIcon role="button" type="add" />
+              Create Your Experiences{" "}
+              <HTMLIcon type="add" onClick={onAddExperience} />
             </h2>
           </header>
           <ul>
-            <For each={getExperiences()}>
+            <For each={state.experiences}>
               {(value, getIndex) => (
                 <li role="group">
                   <label>
@@ -618,6 +689,7 @@ export default function Create() {
                       name={`experiences[${getIndex()}][name]`}
                       type="text"
                       value={value.name}
+                      onInput={[onSetExperienceName, getIndex()]}
                     />
                   </label>
                   <label>
@@ -627,9 +699,13 @@ export default function Create() {
                       name={`experiences[${getIndex()}][bonus]`}
                       type="number"
                       value={value.bonus}
+                      onInput={[onSetExperienceBonus, getIndex()]}
                     />
                   </label>
-                  <HTMLIcon role="button" type="delete" />
+                  <HTMLIcon
+                    type="delete"
+                    onClick={[onRemoveExperience, getIndex()]}
+                  />
                 </li>
               )}
             </For>
@@ -683,11 +759,12 @@ export default function Create() {
           <header>
             <strong>Step 9</strong>
             <h2>
-              Create Your Connections <HTMLIcon role="button" type="add" />
+              Create Your Connections{" "}
+              <HTMLIcon type="add" onClick={onAddConnection} />
             </h2>
           </header>
           <ul>
-            <Index each={getConnections()}>
+            <Index each={state.connections}>
               {(getValue, index) => (
                 <li role="group">
                   <label>
@@ -697,9 +774,13 @@ export default function Create() {
                       name={`connections[${index}]`}
                       type="text"
                       value={getValue()}
+                      onInput={[onSetConnection, index]}
                     />
                   </label>
-                  <HTMLIcon role="button" type="delete" />
+                  <HTMLIcon
+                    type="delete"
+                    onClick={[onRemoveConnection, index]}
+                  />
                 </li>
               )}
             </Index>
