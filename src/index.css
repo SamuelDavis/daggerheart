@@ -14,3 +14,7 @@
   @apply inline-grid place-content-center;
   @apply rounded-sm;
 }
+
+dt {
+  @apply font-bold;
+}
