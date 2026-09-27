@@ -16,6 +16,7 @@ import type {
   StandardCondition,
   Tier,
   Trait,
+  TraitModifier,
   WeaponCategory,
   WeaponKind,
 } from ".";
@@ -196,7 +197,7 @@ export type CharacterCreationRules = {
   startingDomainCards: number;
   startingExperiences: number;
   startingExperienceModifier: number;
-  traitModifiers: readonly number[];
+  traitModifiers: readonly TraitModifier[];
   startingInventory: readonly string[];
   startingGold: { amount: number; currency: Currency };
   startingConsumableChoices: readonly string[];

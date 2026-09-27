@@ -8,6 +8,9 @@ export const traits = [
 ] as const;
 export type Trait = (typeof traits)[number];
 
+export const traitModifierValues = [2, 1, 0, -1] as const;
+export type TraitModifier = (typeof traitModifierValues)[number];
+
 export const ranges = [
   "Melee",
   "Very Close",

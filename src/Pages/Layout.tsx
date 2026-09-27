@@ -10,10 +10,13 @@ export default function Layout(props: ParentProps) {
             <li>
               <A href="/">Home</A>
             </li>
+            <li>
+              <A href="/character-creation">Character Creation</A>
+            </li>
           </ul>
           <ul>
             <li>
-              <strong>SolidJS Template</strong>
+              <strong>Daggerheart</strong>
             </li>
           </ul>
         </nav>
