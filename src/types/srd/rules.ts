@@ -22,12 +22,8 @@ export const characterCreationRules = {
   startingExperiences: 2,
   startingExperienceModifier: 2,
   traitModifiers: [2, 1, 1, 0, 0, -1],
-  startingInventory: [
-    "A torch",
-    "50 feet of rope",
-    "Basic supplies",
-    "A handful of gold",
-  ],
+  startingInventory: ["A torch", "50 feet of rope", "Basic supplies"],
+  startingGold: { amount: 1, currency: "handful" },
   startingConsumableChoices: ["Minor Health Potion", "Minor Stamina Potion"],
 } satisfies CharacterCreationRules;
 

@@ -63,116 +63,12 @@ export type Domain = (typeof domains)[number];
 export const domainCardTypes = ["Ability", "Spell", "Grimoire"] as const;
 export type DomainCardType = (typeof domainCardTypes)[number];
 
-export const classNames = [
-  "Assassin",
-  "Bard",
-  "Brawler",
-  "Druid",
-  "Guardian",
-  "Ranger",
-  "Rogue",
-  "Seraph",
-  "Sorcerer",
-  "Warlock",
-  "Warrior",
-  "Witch",
-  "Wizard",
-] as const;
-export type ClassName = (typeof classNames)[number];
-
-export const subclassNames = [
-  "Executioners Guild",
-  "Poisoners Guild",
-  "Troubadour",
-  "Wordsmith",
-  "Juggernaut",
-  "Martial Artist",
-  "Warden of the Elements",
-  "Warden of Renewal",
-  "Stalwart",
-  "Vengeance",
-  "Beastbound",
-  "Wayfinder",
-  "Nightwalker",
-  "Syndicate",
-  "Divine Wielder",
-  "Winged Sentinel",
-  "Elemental Origin",
-  "Primal Origin",
-  "Pact of the Endless",
-  "Pact of the Wrathful",
-  "Call of the Brave",
-  "Call of the Slayer",
-  "Hedge",
-  "Moon",
-  "School of Knowledge",
-  "School of War",
-] as const;
-export type SubclassName = (typeof subclassNames)[number];
-
 export const subclassCardTypes = [
   "Foundation",
   "Specialization",
   "Mastery",
 ] as const;
 export type SubclassCardType = (typeof subclassCardTypes)[number];
-
-export const ancestryNames = [
-  "Aetheris",
-  "Clank",
-  "Drakona",
-  "Dwarf",
-  "Earthkin",
-  "Elf",
-  "Emberkin",
-  "Faerie",
-  "Faun",
-  "Firbolg",
-  "Fungril",
-  "Galapa",
-  "Giant",
-  "Gnome",
-  "Goblin",
-  "Halfling",
-  "Human",
-  "Infernis",
-  "Katari",
-  "Orc",
-  "Ribbet",
-  "Simiah",
-  "Skykin",
-  "Tidekin",
-] as const;
-export type AncestryName = (typeof ancestryNames)[number];
-
-export const communityNames = [
-  "Duneborne",
-  "Freeborne",
-  "Frostborne",
-  "Hearthborne",
-  "Highborne",
-  "Loreborne",
-  "Orderborne",
-  "Reborne",
-  "Ridgeborne",
-  "Seaborne",
-  "Slyborne",
-  "Underborne",
-  "Wanderborne",
-  "Warborne",
-  "Wildborne",
-] as const;
-export type CommunityName = (typeof communityNames)[number];
-
-export const transformationNames = [
-  "Demigod",
-  "Ghost",
-  "Reanimated",
-  "Shapeshifter",
-  "Vampire",
-  "Werewolf",
-] as const;
-export type TransformationName = (typeof transformationNames)[number];
 
 export const standardConditions = [
   "Hidden",

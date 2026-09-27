@@ -1,10 +1,7 @@
 import type {
   AdversaryFeatureType,
   AdversaryType,
-  AncestryName,
   Burden,
-  ClassName,
-  CommunityName,
   Currency,
   DamageType,
   Domain,
@@ -17,10 +14,8 @@ import type {
   Roll,
   RollOutcome,
   StandardCondition,
-  SubclassName,
   Tier,
   Trait,
-  TransformationName,
   WeaponCategory,
   WeaponKind,
 } from ".";
@@ -74,7 +69,7 @@ export type Consumable = Loot;
 export type DomainDefinition = {
   name: Domain;
   description: string;
-  classes: readonly ClassName[];
+  classes: readonly Class["name"][];
 };
 
 export type DomainCard = {
@@ -87,8 +82,8 @@ export type DomainCard = {
 };
 
 export type Subclass = {
-  name: SubclassName;
-  class: ClassName;
+  name: string;
+  class: Class["name"];
   description: string;
   spellcastTrait: Trait | null;
   foundation: readonly Feature[];
@@ -97,7 +92,7 @@ export type Subclass = {
 };
 
 export type Class = {
-  name: ClassName;
+  name: string;
   description: string;
   domains: readonly [Domain, Domain];
   startingEvasion: number;
@@ -105,24 +100,24 @@ export type Class = {
   classItems: readonly [string, string];
   hopeFeature: Feature;
   classFeatures: readonly Feature[];
-  subclasses: readonly [SubclassName, SubclassName];
+  subclasses: readonly [Subclass["name"], Subclass["name"]];
 };
 
 export type Ancestry = {
-  name: AncestryName;
+  name: string;
   description: string;
   features: readonly [Feature, Feature];
 };
 
 export type Community = {
-  name: CommunityName;
+  name: string;
   description: string;
   adjectives: readonly [string, string, string, string, string, string];
   feature: Feature;
 };
 
 export type Transformation = {
-  name: TransformationName;
+  name: string;
   description: string;
   features: readonly [Feature, Feature];
 };
@@ -203,6 +198,7 @@ export type CharacterCreationRules = {
   startingExperienceModifier: number;
   traitModifiers: readonly number[];
   startingInventory: readonly string[];
+  startingGold: { amount: number; currency: Currency };
   startingConsumableChoices: readonly string[];
 };
 
