@@ -2,6 +2,7 @@ export * from "./adversaries";
 export * from "./ancestries";
 export * from "./armor";
 export * from "./beastforms";
+export * from "./characters";
 export * from "./classes";
 export * from "./communities";
 export * from "./companion";
