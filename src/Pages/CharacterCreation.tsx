@@ -13,22 +13,30 @@ import {
   characterCreationRules,
   classes,
   communities,
+  damageTypes,
   domainCards,
+  dualityDieValues,
+  martialStances,
+  sorcererElements,
   subclasses,
   traitModifierValues,
   traits,
   transformations,
   weapons,
-  type Ancestry,
   type Armor,
   type Class,
-  type Community,
+  type ComboDie,
+  type DedicatedPrinciples,
   type DomainCard,
+  type DualityDieValue,
   type Feature,
+  type MartialArtistStances,
+  type Patron,
+  type PlayerCharacter,
+  type PurposefulDesign,
+  type RangerCompanion,
+  type SorcererElement,
   type Subclass,
-  type Trait,
-  type TraitModifier,
-  type Transformation,
   type Weapon,
 } from "../types";
 import {
@@ -47,33 +55,29 @@ import {
   type Targeted,
 } from "@samueldavis/solidlib";
 
-type PlayerCharacter = {
-  name: string;
-  pronouns: string;
-  description: string;
-  subclass: Subclass["name"];
-  primaryAncestry: Ancestry["name"];
-  secondaryAncestry: null | Ancestry["name"];
-  heritage: string;
-  community: Community["name"];
-  transformation: null | Transformation["name"];
-  traits: Record<Trait, TraitModifier>;
-  primaryWeapon: Weapon["name"];
-  secondaryWeapon: null | Weapon["name"];
-  armor: Armor["name"];
-  consumable: string;
-  classItem: string;
-  background: string;
-  experiences: [string, string];
-  domainCards: [DomainCard["name"], DomainCard["name"]];
-  connections: string;
+type CharacterExtras = {
+  comboDie?: ComboDie;
+  stances?: MartialArtistStances["known"];
+  companion?: Omit<RangerCompanion, "stressSlots" | "markedStress">;
+  sorcererElement?: SorcererElement;
+  patron?: Patron;
+  favor?: number;
+  strangePatterns?: DualityDieValue;
+  purposefulDesign?: PurposefulDesign;
+  breathElement?: string;
+  dedicatedPrinciples?: DedicatedPrinciples;
 };
+
+type CharacterDraft = PlayerCharacter & CharacterExtras;
 
 type WeaponGroup = { trait: Weapon["trait"]; weapons: Weapon[] };
 
 const level = characterCreationRules.startingLevel;
 const proficiency = characterCreationRules.startingProficiency;
 const pairIndexes = [0, 1] as const;
+const principleIndexes = [0, 1, 2] as const;
+const startingFavor = 3;
+const tierOneStances = martialStances.filter((s) => s.tier === 1);
 const tierOneWeapons = weapons.filter((w) => w.tier === 1);
 const tierOneArmor = armor.filter((a) => a.tier === 1);
 const primaryWeaponGroups = groupWeaponsByTrait("Primary");
@@ -155,10 +159,86 @@ function formatDomainCard(card: DomainCard): string {
   return `${card.name}: ${card.domain} ${card.type}, Recall Cost ${card.recallCost}`;
 }
 
-function createCharacter(): PlayerCharacter {
+function syncExtra<K extends keyof CharacterExtras>(
+  character: CharacterDraft,
+  key: K,
+  applies: boolean,
+  create: () => CharacterDraft[K],
+): void {
+  if (!applies) delete character[key];
+  else if (character[key] === undefined) character[key] = create();
+}
+
+function syncExtras(character: CharacterDraft): void {
+  const className = findClass(character.subclass).name;
+  const secondFeatureAncestry =
+    character.secondaryAncestry ?? character.primaryAncestry;
+  syncExtra(character, "comboDie", className === "Brawler", () => "d4");
+  syncExtra(character, "stances", character.subclass === "Martial Artist", () =>
+    tierOneStances.slice(0, 2).map((stance) => stance.name),
+  );
+  syncExtra(
+    character,
+    "companion",
+    character.subclass === "Beastbound",
+    () => ({
+      name: "",
+      animal: "",
+      evasion: 10,
+      experiences: [
+        { name: "", modifier: 2 },
+        { name: "", modifier: 2 },
+      ],
+      attack: {
+        description: "",
+        damageDie: "d6",
+        range: "Melee",
+        damageType: "phy",
+      },
+      upgrades: [],
+    }),
+  );
+  syncExtra(
+    character,
+    "sorcererElement",
+    character.subclass === "Elemental Origin",
+    () => sorcererElements[0],
+  );
+  syncExtra(character, "patron", className === "Warlock", () => ({
+    name: "",
+    sphereOfInfluence: "",
+  }));
+  syncExtra(character, "favor", className === "Warlock", () => startingFavor);
+  syncExtra(
+    character,
+    "strangePatterns",
+    className === "Wizard",
+    () => dualityDieValues[0],
+  );
+  syncExtra(
+    character,
+    "purposefulDesign",
+    character.primaryAncestry === "Clank",
+    () => ({ maker: "", purpose: "", experience: 0 }),
+  );
+  syncExtra(
+    character,
+    "breathElement",
+    secondFeatureAncestry === "Drakona",
+    () => "",
+  );
+  syncExtra(
+    character,
+    "dedicatedPrinciples",
+    character.community === "Orderborne",
+    () => ["", "", ""],
+  );
+}
+
+function createCharacter(): CharacterDraft {
   const subclass = subclasses[0];
   const characterClass = findClass(subclass.name);
-  return {
+  const character: CharacterDraft = {
     name: "",
     pronouns: "",
     description: "",
@@ -186,9 +266,11 @@ function createCharacter(): PlayerCharacter {
     domainCards: getDefaultDomainCards(characterClass),
     connections: "",
   };
+  syncExtras(character);
+  return character;
 }
 
-async function readCharacterFile(file: File): Promise<PlayerCharacter> {
+async function readCharacterFile(file: File): Promise<CharacterDraft> {
   return JSON.parse(await file.text());
 }
 
@@ -209,7 +291,7 @@ function Features(props: { features: readonly Feature[] }) {
 
 export default function CharacterCreation() {
   const [character, setCharacter] = persist(
-    createStore<PlayerCharacter>(createCharacter()),
+    createStore<CharacterDraft>(createCharacter()),
     { key: "player-character" },
   );
 
@@ -243,8 +325,8 @@ export default function CharacterCreation() {
 }
 
 function CharacterSheet(props: {
-  character: PlayerCharacter;
-  setCharacter: SetStoreFunction<PlayerCharacter>;
+  character: CharacterDraft;
+  setCharacter: SetStoreFunction<CharacterDraft>;
 }) {
   const character = props.character;
   const setCharacter = props.setCharacter;
@@ -296,6 +378,9 @@ function CharacterSheet(props: {
   const getDomainCardOptions = createMemo(() =>
     findDomainCardOptions(getClass()),
   );
+  const getExperienceModifier = (index: 0 | 1) =>
+    characterCreationRules.startingExperienceModifier +
+    (character.purposefulDesign?.experience === index ? 1 : 0);
   const getSelectedDomainCards = createMemo(() =>
     character.domainCards.map((name) => {
       const card = domainCards.find((c) => c.name === name);
@@ -314,7 +399,6 @@ function CharacterSheet(props: {
   ): void {
     const name = event.currentTarget.name;
     const value = event.currentTarget.value;
-    assert(isIn, name, character);
     setCharacter(
       produce((character) => {
         switch (name) {
@@ -360,6 +444,17 @@ function CharacterSheet(props: {
           case "transformation":
             character[name] = value === "" ? null : value;
             break;
+          case "sorcererElement":
+            assert(isOf, value, sorcererElements);
+            character.sorcererElement = value;
+            break;
+          case "strangePatterns": {
+            const number = Number(value);
+            assert(isOf, number, dualityDieValues);
+            character.strangePatterns = number;
+            break;
+          }
+          case "breathElement":
           case "name":
           case "pronouns":
           case "description":
@@ -377,6 +472,7 @@ function CharacterSheet(props: {
               cause: { name, value },
             });
         }
+        syncExtras(character);
       }),
     );
   }
@@ -407,6 +503,111 @@ function CharacterSheet(props: {
     const index = Number(event.currentTarget.dataset.index);
     assert(isOf, index, pairIndexes);
     setCharacter("domainCards", index, event.currentTarget.value);
+  }
+
+  function onSetStance(event: Targeted<HTMLSelectElement>): void {
+    const index = Number(event.currentTarget.dataset.index);
+    const value = event.currentTarget.value;
+    assert(isOf, index, pairIndexes);
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.stances);
+        character.stances[index] = value;
+      }),
+    );
+  }
+
+  function onSetCompanion(
+    event: Targeted<HTMLInputElement | HTMLSelectElement>,
+  ): void {
+    const name = event.currentTarget.name;
+    const value = event.currentTarget.value;
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.companion);
+        switch (name) {
+          case "name":
+          case "animal":
+            character.companion[name] = value;
+            break;
+          case "attackDescription":
+            character.companion.attack.description = value;
+            break;
+          case "damageType":
+            assert(isOf, value, damageTypes);
+            character.companion.attack.damageType = value;
+            break;
+          default:
+            throw new TypeError("Unhandled companion attribute", {
+              cause: { name, value },
+            });
+        }
+      }),
+    );
+  }
+
+  function onSetCompanionExperience(event: Targeted<HTMLInputElement>): void {
+    const index = Number(event.currentTarget.dataset.index);
+    const value = event.currentTarget.value;
+    assert(isOf, index, pairIndexes);
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.companion);
+        character.companion.experiences[index].name = value;
+      }),
+    );
+  }
+
+  function onSetPatron(event: Targeted<HTMLInputElement>): void {
+    const name = event.currentTarget.name;
+    const value = event.currentTarget.value;
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.patron);
+        assert(isIn, name, character.patron);
+        character.patron[name] = value;
+      }),
+    );
+  }
+
+  function onSetPurposefulDesign(
+    event: Targeted<HTMLInputElement | HTMLSelectElement>,
+  ): void {
+    const name = event.currentTarget.name;
+    const value = event.currentTarget.value;
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.purposefulDesign);
+        switch (name) {
+          case "maker":
+          case "purpose":
+            character.purposefulDesign[name] = value;
+            break;
+          case "experience": {
+            const index = Number(value);
+            assert(isOf, index, pairIndexes);
+            character.purposefulDesign.experience = index;
+            break;
+          }
+          default:
+            throw new TypeError("Unhandled purposeful design attribute", {
+              cause: { name, value },
+            });
+        }
+      }),
+    );
+  }
+
+  function onSetDedicatedPrinciple(event: Targeted<HTMLInputElement>): void {
+    const index = Number(event.currentTarget.dataset.index);
+    const value = event.currentTarget.value;
+    assert(isOf, index, principleIndexes);
+    setCharacter(
+      produce((character) => {
+        assert(isNonNullable, character.dedicatedPrinciples);
+        character.dedicatedPrinciples[index] = value;
+      }),
+    );
   }
 
   function onSave(): void {
@@ -508,6 +709,202 @@ function CharacterSheet(props: {
           <summary>Foundation Features</summary>
           <Features features={getSubclass().foundation} />
         </details>
+        <Show when={character.comboDie}>
+          {(getComboDie) => (
+            <dl>
+              <dt>Combo Die</dt>
+              <dd>{getComboDie()}</dd>
+            </dl>
+          )}
+        </Show>
+        <Show when={character.stances}>
+          {(getStances) => (
+            <fieldset>
+              <legend>Martial Stances</legend>
+              <For each={pairIndexes}>
+                {(index) => (
+                  <>
+                    <label for={`stance${index}`}>Stance {index + 1}</label>
+                    <select
+                      id={`stance${index}`}
+                      data-index={index}
+                      onInput={onSetStance}
+                    >
+                      <For each={tierOneStances}>
+                        {(stance) => (
+                          <option
+                            value={stance.name}
+                            selected={stance.name === getStances()[index]}
+                            disabled={getStances().some(
+                              (name, i) => i !== index && name === stance.name,
+                            )}
+                          >
+                            {stance.name}
+                          </option>
+                        )}
+                      </For>
+                    </select>
+                    <Show
+                      when={tierOneStances.find(
+                        (stance) => stance.name === getStances()[index],
+                      )}
+                    >
+                      {(getStance) => (
+                        <blockquote>{getStance().description}</blockquote>
+                      )}
+                    </Show>
+                  </>
+                )}
+              </For>
+            </fieldset>
+          )}
+        </Show>
+        <Show when={character.companion}>
+          {(getCompanion) => (
+            <fieldset>
+              <legend>Companion</legend>
+              <label for="companionName">Name</label>
+              <input
+                name="name"
+                id="companionName"
+                autocomplete="off"
+                value={getCompanion().name}
+                onInput={onSetCompanion}
+              />
+              <label for="companionAnimal">Animal</label>
+              <input
+                name="animal"
+                id="companionAnimal"
+                autocomplete="off"
+                value={getCompanion().animal}
+                onInput={onSetCompanion}
+              />
+              <For each={pairIndexes}>
+                {(index) => (
+                  <>
+                    <label for={`companionExperience${index}`}>
+                      Companion Experience {index + 1} (
+                      {formatModifier(
+                        getCompanion().experiences[index].modifier,
+                      )}
+                      )
+                    </label>
+                    <input
+                      id={`companionExperience${index}`}
+                      data-index={index}
+                      autocomplete="off"
+                      value={getCompanion().experiences[index].name}
+                      onInput={onSetCompanionExperience}
+                    />
+                  </>
+                )}
+              </For>
+              <label for="companionAttack">Attack</label>
+              <input
+                name="attackDescription"
+                id="companionAttack"
+                autocomplete="off"
+                value={getCompanion().attack.description}
+                onInput={onSetCompanion}
+              />
+              <label for="companionDamageType">Damage Type</label>
+              <select
+                name="damageType"
+                id="companionDamageType"
+                onInput={onSetCompanion}
+              >
+                <For each={damageTypes}>
+                  {(type) => (
+                    <option
+                      value={type}
+                      selected={type === getCompanion().attack.damageType}
+                    >
+                      {type}
+                    </option>
+                  )}
+                </For>
+              </select>
+              <dl>
+                <dt>Evasion</dt>
+                <dd>{getCompanion().evasion}</dd>
+                <dt>Damage</dt>
+                <dd>
+                  {getCompanion().attack.range}, {proficiency}
+                  {getCompanion().attack.damageDie}{" "}
+                  {getCompanion().attack.damageType}
+                </dd>
+              </dl>
+            </fieldset>
+          )}
+        </Show>
+        <Show when={character.sorcererElement}>
+          {(getElement) => (
+            <>
+              <label for="sorcererElement">Element</label>
+              <select
+                name="sorcererElement"
+                id="sorcererElement"
+                onInput={onSetAttribute}
+              >
+                <For each={sorcererElements}>
+                  {(element) => (
+                    <option value={element} selected={element === getElement()}>
+                      {element}
+                    </option>
+                  )}
+                </For>
+              </select>
+            </>
+          )}
+        </Show>
+        <Show when={character.patron}>
+          {(getPatron) => (
+            <fieldset>
+              <legend>Patron</legend>
+              <label for="patronName">Name</label>
+              <input
+                name="name"
+                id="patronName"
+                autocomplete="off"
+                value={getPatron().name}
+                onInput={onSetPatron}
+              />
+              <label for="patronSphere">Sphere of Influence</label>
+              <input
+                name="sphereOfInfluence"
+                id="patronSphere"
+                autocomplete="off"
+                placeholder="Nature, Chaos, Wisdom, Mischief, Love, War, Justice, Death"
+                value={getPatron().sphereOfInfluence}
+                onInput={onSetPatron}
+              />
+              <dl>
+                <dt>Favor</dt>
+                <dd>{character.favor}</dd>
+              </dl>
+            </fieldset>
+          )}
+        </Show>
+        <Show when={character.strangePatterns}>
+          {(getNumber) => (
+            <>
+              <label for="strangePatterns">Strange Patterns</label>
+              <select
+                name="strangePatterns"
+                id="strangePatterns"
+                onInput={onSetAttribute}
+              >
+                <For each={dualityDieValues}>
+                  {(value) => (
+                    <option value={value} selected={value === getNumber()}>
+                      {value}
+                    </option>
+                  )}
+                </For>
+              </select>
+            </>
+          )}
+        </Show>
       </section>
 
       <section>
@@ -587,6 +984,61 @@ function CharacterSheet(props: {
           <summary>Ancestry Features</summary>
           <Features features={getAncestryFeatures()} />
         </details>
+        <Show when={character.purposefulDesign}>
+          {(getDesign) => (
+            <fieldset>
+              <legend>Purposeful Design</legend>
+              <label for="maker">Maker</label>
+              <input
+                name="maker"
+                id="maker"
+                autocomplete="off"
+                value={getDesign().maker}
+                onInput={onSetPurposefulDesign}
+              />
+              <label for="purpose">Purpose</label>
+              <input
+                name="purpose"
+                id="purpose"
+                autocomplete="off"
+                value={getDesign().purpose}
+                onInput={onSetPurposefulDesign}
+              />
+              <label for="purposefulExperience">Experience</label>
+              <select
+                name="experience"
+                id="purposefulExperience"
+                aria-describedby="purposefulExperienceHelp"
+                onInput={onSetPurposefulDesign}
+              >
+                <For each={pairIndexes}>
+                  {(index) => (
+                    <option
+                      value={index}
+                      selected={index === getDesign().experience}
+                    >
+                      Experience {index + 1}
+                    </option>
+                  )}
+                </For>
+              </select>
+              <small id="purposefulExperienceHelp">
+                This Experience gains a permanent +1 bonus.
+              </small>
+            </fieldset>
+          )}
+        </Show>
+        <Show when={character.breathElement !== undefined}>
+          <label for="breathElement">Breath Element</label>
+          <input
+            name="breathElement"
+            id="breathElement"
+            autocomplete="off"
+            placeholder="electricity, fire, ice"
+            value={character.breathElement}
+            onInput={onSetAttribute}
+          />
+        </Show>
         <label for="community">Community</label>
         <select name="community" id="community" onInput={onSetAttribute}>
           <For each={communities}>
@@ -611,6 +1063,29 @@ function CharacterSheet(props: {
           <summary>Community Feature</summary>
           <Features features={[getCommunity().feature]} />
         </details>
+        <Show when={character.dedicatedPrinciples}>
+          {(getPrinciples) => (
+            <fieldset>
+              <legend>Dedicated Principles</legend>
+              <For each={principleIndexes}>
+                {(index) => (
+                  <>
+                    <label for={`principle${index}`}>
+                      Principle {index + 1}
+                    </label>
+                    <input
+                      id={`principle${index}`}
+                      data-index={index}
+                      autocomplete="off"
+                      value={getPrinciples()[index]}
+                      onInput={onSetDedicatedPrinciple}
+                    />
+                  </>
+                )}
+              </For>
+            </fieldset>
+          )}
+        </Show>
         <label for="transformation">Transformation</label>
         <select
           name="transformation"
@@ -920,7 +1395,10 @@ function CharacterSheet(props: {
         <For each={pairIndexes}>
           {(index) => (
             <>
-              <label for={`experience${index}`}>Experience {index + 1}</label>
+              <label for={`experience${index}`}>
+                Experience {index + 1} (
+                {formatModifier(getExperienceModifier(index))})
+              </label>
               <input
                 id={`experience${index}`}
                 data-index={index}

@@ -16,13 +16,24 @@ import type {
   Weapon,
 } from ".";
 
-export type ComboDie = "d4" | "d6" | "d8" | "d10" | "d12";
+export const comboDice = ["d4", "d6", "d8", "d10", "d12"] as const;
+export type ComboDie = (typeof comboDice)[number];
 
 export type PrayerDie = 1 | 2 | 3 | 4;
 
-export type DualityDieValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export const dualityDieValues = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+] as const;
+export type DualityDieValue = (typeof dualityDieValues)[number];
 
-export type SorcererElement = "air" | "earth" | "fire" | "lightning" | "water";
+export const sorcererElements = [
+  "air",
+  "earth",
+  "fire",
+  "lightning",
+  "water",
+] as const;
+export type SorcererElement = (typeof sorcererElements)[number];
 
 export type MartialArtistStances = {
   known: MartialStance["name"][];
