@@ -593,4 +593,4 @@ export const beastforms = [
       },
     ],
   },
-] satisfies Beastform[];
+] as const satisfies readonly Beastform[];

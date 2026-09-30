@@ -5,12 +5,16 @@ import type {
   Condition,
   CurrencyConversion,
   DeathMove,
+  Difficulty,
   DowntimeMove,
+  Level,
   ResourceLimits,
   RollOutcomeDefinition,
   TierAchievement,
   TierBenchmark,
   TierDefinition,
+  TierScaled,
+  TraitVerbs,
 } from ".";
 
 export const characterCreationRules = {
@@ -25,7 +29,7 @@ export const characterCreationRules = {
   startingInventory: ["A torch", "50 feet of rope", "Basic supplies"],
   startingGold: { amount: 1, currency: "handful" },
   startingConsumableChoices: ["Minor Health Potion", "Minor Stamina Potion"],
-} satisfies CharacterCreationRules;
+} as const satisfies CharacterCreationRules;
 
 export const resourceLimits = {
   maxHope: 6,
@@ -38,19 +42,19 @@ export const resourceLimits = {
   maxInventoryWeapons: 2,
   maxConsumablesOfEachType: 5,
   maxAdvantageDice: 1,
-} satisfies ResourceLimits;
+} as const satisfies ResourceLimits;
 
 export const currencyConversions = [
   { from: "handful", to: "bag", rate: 10 },
   { from: "bag", to: "chest", rate: 10 },
-] satisfies CurrencyConversion[];
+] as const satisfies readonly CurrencyConversion[];
 
 export const tierDefinitions = [
   { tier: 1, levels: [1] },
   { tier: 2, levels: [2, 3, 4] },
   { tier: 3, levels: [5, 6, 7] },
   { tier: 4, levels: [8, 9, 10] },
-] satisfies TierDefinition[];
+] as const satisfies readonly TierDefinition[];
 
 export const tierAchievements = [
   {
@@ -71,7 +75,7 @@ export const tierAchievements = [
     proficiencyIncrease: 1,
     clearMarkedTraits: true,
   },
-] satisfies TierAchievement[];
+] as const satisfies readonly TierAchievement[];
 
 export const advancements = [
   {
@@ -79,53 +83,107 @@ export const advancements = [
     description:
       "Choose two unmarked character traits and gain a permanent +1 bonus to them. You can't increase these stats again until the next tier (when your tier achievement allows you to clear those marks).",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Add Hit Point Slot",
     description: "Permanently add 1 or more Hit Point slots.",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Add Stress Slot",
     description: "Permanently add 1 or more Stress slots.",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Increase Experiences",
     description:
       "Choose two Experiences on your character sheet and gain a permanent +1 bonus to both.",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Additional Domain Card",
     description:
       "You can choose an additional domain card at or below your level or from your class's domains. If you've multiclassed, you can instead select a card at or below half your level from your chosen multiclass domain.",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Increase Evasion",
     description: "Gain a permanent +1 bonus to your Evasion.",
     cost: 1,
+    tiers: [2, 3, 4],
+    class: null,
   },
   {
     name: "Upgraded Subclass Card",
     description:
       "Take the next card for your subclass. If you have only the foundation card, take a specialization; if you have a specialization already, take a mastery. Then cross out this tier's multiclass option.",
     cost: 1,
+    tiers: [3, 4],
+    class: null,
   },
   {
     name: "Increase Proficiency",
     description:
       'Fill in one of the open circles in the "Proficiency" section of your character sheet, then increase your weapon\'s number of damage dice by 1.',
     cost: 2,
+    tiers: [3, 4],
+    class: null,
   },
   {
     name: "Multiclass",
     description:
       'Choose an additional class, select one of its domains, and gain its class feature. Add the appropriate multiclass module to your character sheet and take the foundation card from one of its subclasses. Then cross out the "upgraded subclass" advancement option in this tier and all other "multiclass" advancement options on your character sheet.',
     cost: 2,
+    tiers: [3, 4],
+    class: null,
   },
-] satisfies Advancement[];
+  {
+    name: "Increase Combo Die",
+    description:
+      "Permanently increase your Combo Die by one step (d4 to d6, d6 to d8, etc.).",
+    cost: 1,
+    tiers: [2, 3, 4],
+    class: "Brawler",
+  },
+] as const satisfies readonly Advancement[];
+
+export const additionalDomainCardMaxLevelByTier = [
+  { tier: 2, value: 4 },
+  { tier: 3, value: 7 },
+  { tier: 4, value: 10 },
+] as const satisfies TierScaled<Level>;
+
+export const multiclassMinimumLevel = 5 satisfies Level;
+
+export const multiclassDomainCardLevelDivisor = 2;
+
+export const traitVerbs = {
+  Agility: ["Sprint", "Leap", "Maneuver"],
+  Strength: ["Lift", "Smash", "Grapple"],
+  Finesse: ["Control", "Hide", "Tinker"],
+  Instinct: ["Perceive", "Sense", "Navigate"],
+  Presence: ["Charm", "Perform", "Deceive"],
+  Knowledge: ["Recall", "Analyze", "Comprehend"],
+} as const satisfies TraitVerbs;
+
+export const difficulties = [
+  { value: 5, label: "Very Easy" },
+  { value: 10, label: "Easy" },
+  { value: 15, label: "Average" },
+  { value: 20, label: "Hard" },
+  { value: 25, label: "Very Hard" },
+  { value: 30, label: "Nearly Impossible" },
+] as const satisfies readonly Difficulty[];
 
 export const conditions = [
   {
@@ -143,7 +201,7 @@ export const conditions = [
     description:
       "When a creature is Vulnerable, all rolls targeting them have advantage.",
   },
-] satisfies Condition[];
+] as const satisfies readonly Condition[];
 
 export const downtimeMoves = [
   {
@@ -162,7 +220,7 @@ export const downtimeMoves = [
     description: "Clear 1d4+Tier Armor Slots from your or an ally's armor.",
   },
   {
-    name: "Prepare",
+    name: "Prepare (Short Rest)",
     rest: "Short",
     description:
       "Describe how you prepare yourself for the path ahead, then gain a Hope. If you choose to Prepare with one or more members of your party, you each gain 2 Hope.",
@@ -183,7 +241,7 @@ export const downtimeMoves = [
     description: "Clear all Armor Slots from your or an ally's armor.",
   },
   {
-    name: "Prepare",
+    name: "Prepare (Long Rest)",
     rest: "Long",
     description:
       "Describe how you prepare for the next day's adventure, then gain a Hope. If you choose to Prepare with one or more members of your party, you each gain 2 Hope.",
@@ -194,7 +252,7 @@ export const downtimeMoves = [
     description:
       "With GM approval, a PC may pursue a long-term project, such as deciphering an ancient text or crafting a new weapon. The first time they start a new project, assign it a countdown. Each time a PC makes the Work on a Project move, they either advance their project's countdown automatically or make an action roll to advance it (GM's choice).",
   },
-] satisfies DowntimeMove[];
+] as const satisfies readonly DowntimeMove[];
 
 export const deathMoves = [
   {
@@ -212,7 +270,7 @@ export const deathMoves = [
     description:
       "Roll your Duality Dice. If the Hope Die is higher, your character stays on their feet and clears a number of Hit Points or Stress equal to the value of the Hope Die (you can divide the Hope Die value between Hit Points and Stress however you'd prefer). If the Fear Die is higher, your character crosses through the veil of death. If the Duality Dice show matching results, your character stays up and clears all Hit Points and Stress.",
   },
-] satisfies DeathMove[];
+] as const satisfies readonly DeathMove[];
 
 export const rollOutcomeDefinitions = [
   {
@@ -240,7 +298,7 @@ export const rollOutcomeDefinitions = [
     description:
       'If your total is less than the Difficulty AND your Fear Die shows a higher result than your Hope Die, you rolled a "Failure with Fear." You fail with a major consequence and the GM gains a Fear, then the spotlight swings to the GM.',
   },
-] satisfies RollOutcomeDefinition[];
+] as const satisfies readonly RollOutcomeDefinition[];
 
 export const adversaryBenchmarks = [
   {
@@ -271,11 +329,11 @@ export const adversaryBenchmarks = [
     difficulty: 20,
     thresholds: { major: 25, severe: 45 },
   },
-] satisfies AdversaryBenchmark[];
+] as const satisfies readonly AdversaryBenchmark[];
 
 export const environmentBenchmarks = [
   { tier: 1, damage: ["1d6+1", "1d8+3"], difficulty: 11 },
   { tier: 2, damage: ["2d6+3", "2d10+2"], difficulty: 14 },
   { tier: 3, damage: ["3d8+3", "3d10+1"], difficulty: 17 },
   { tier: 4, damage: ["4d8+3", "4d10+10"], difficulty: 20 },
-] satisfies TierBenchmark[];
+] as const satisfies readonly TierBenchmark[];

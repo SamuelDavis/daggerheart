@@ -38,7 +38,12 @@ export type WeaponKind = (typeof weaponKinds)[number];
 export type Modifier = `+${number}` | `-${number}`;
 export type Die = `d${number}`;
 export type Dice = Die | `${number}${Die}`;
-export type Roll = Dice | `${Dice}${Modifier}`;
+export type Roll = Dice | `${Dice}${Modifier}` | `${Dice}+${Dice}`;
+
+export const dualityDieValues = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+] as const;
+export type DualityDieValue = (typeof dualityDieValues)[number];
 
 export const tiers = [1, 2, 3, 4] as const;
 export type Tier = (typeof tiers)[number];

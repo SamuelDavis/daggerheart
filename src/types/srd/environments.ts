@@ -48,4 +48,4 @@ export const environmentIndex = [
   { name: "Necromancer's Ossuary", tier: 4, type: "Exploration" },
   { name: "Realm of the Dead", tier: 4, type: "Traversal" },
   { name: "Time Court", tier: 4, type: "Event" },
-] satisfies EnvironmentReference[];
+] as const satisfies readonly EnvironmentReference[];

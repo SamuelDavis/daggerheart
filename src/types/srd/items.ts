@@ -832,4 +832,4 @@ export const items = [
       "Once per long rest, you can activate your Hope feature without spending Hope. You can carry only one relic.",
     set: "Hope & Fear",
   },
-] satisfies Item[];
+] as const satisfies readonly Item[];

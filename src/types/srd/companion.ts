@@ -1,4 +1,4 @@
-import type { CompanionUpgrade } from ".";
+import type { CompanionUpgrade, Die, Range } from ".";
 
 export const companionUpgrades = [
   {
@@ -38,4 +38,44 @@ export const companionUpgrades = [
     name: "Aware",
     description: "Your companion gains a permanent +2 bonus to their Evasion.",
   },
-] satisfies CompanionUpgrade[];
+] as const satisfies readonly CompanionUpgrade[];
+
+export const defaultCompanionEvasion = 10;
+
+export const defaultCompanionExperienceCount = 2;
+
+export const defaultCompanionExperienceModifier = 2;
+
+export const defaultCompanionDamageDie = "d6" satisfies Die;
+
+export const defaultCompanionRange = "Melee" satisfies Range;
+
+export const companionDamageDice = [
+  "d6",
+  "d8",
+  "d10",
+  "d12",
+] as const satisfies readonly Die[];
+
+export const exampleCompanionExperiences = [
+  "Bold Distraction",
+  "Expert Climber",
+  "Fetch",
+  "Friendly",
+  "Guardian of the Forest",
+  "Horrifying",
+  "Intimidating",
+  "Loyal Until the End",
+  "Navigation",
+  "Nimble",
+  "Nobody Left Behind",
+  "On High Alert",
+  "Protective",
+  "Royal Companion",
+  "Scout",
+  "Service Animal",
+  "Trusted Mount",
+  "Vigilant",
+  "We Always Find Them",
+  "You Can't Hit What You Can't Find",
+] as const satisfies readonly string[];

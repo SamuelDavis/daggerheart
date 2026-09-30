@@ -4034,7 +4034,7 @@ export const weapons = [
         "When a target marks any number of Hit Points from an attack you rolled with Fear, they mark an equal number of Stress.",
     },
   },
-] satisfies Weapon[];
+] as const satisfies readonly Weapon[];
 
 export const combatWheelchairs = [
   {
@@ -4185,7 +4185,7 @@ export const combatWheelchairs = [
     burden: "One-Handed",
     feature: { name: "Reliable", description: "+1 to attack rolls" },
   },
-] satisfies Weapon[];
+] as const satisfies readonly Weapon[];
 
 export const everydayHeroWeapons = [
   {
@@ -4577,7 +4577,7 @@ export const everydayHeroWeapons = [
         "This weapon temporarily lights up the area the flare lands in.",
     },
   },
-] satisfies Weapon[];
+] as const satisfies readonly Weapon[];
 
 export const westernWeapons = [
   {
@@ -4655,7 +4655,7 @@ export const westernWeapons = [
   },
   {
     tier: 2,
-    name: "Revolver",
+    name: "Improved Revolver",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -4670,7 +4670,7 @@ export const westernWeapons = [
   },
   {
     tier: 2,
-    name: "Rifle",
+    name: "Improved Rifle",
     category: "Primary",
     kind: "Physical",
     trait: "Agility",
@@ -4684,7 +4684,7 @@ export const westernWeapons = [
   },
   {
     tier: 2,
-    name: "Shotgun",
+    name: "Improved Shotgun",
     category: "Primary",
     kind: "Physical",
     trait: "Strength",
@@ -4699,7 +4699,7 @@ export const westernWeapons = [
   },
   {
     tier: 2,
-    name: "Lasso",
+    name: "Improved Lasso",
     category: "Secondary",
     kind: "Physical",
     trait: "Agility",
@@ -4714,7 +4714,7 @@ export const westernWeapons = [
   },
   {
     tier: 2,
-    name: "Small Revolver",
+    name: "Improved Small Revolver",
     category: "Secondary",
     kind: "Physical",
     trait: "Finesse",
@@ -4728,7 +4728,7 @@ export const westernWeapons = [
   },
   {
     tier: 3,
-    name: "Revolver",
+    name: "Advanced Revolver",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -4743,7 +4743,7 @@ export const westernWeapons = [
   },
   {
     tier: 3,
-    name: "Rifle",
+    name: "Advanced Rifle",
     category: "Primary",
     kind: "Physical",
     trait: "Agility",
@@ -4757,7 +4757,7 @@ export const westernWeapons = [
   },
   {
     tier: 3,
-    name: "Shotgun",
+    name: "Advanced Shotgun",
     category: "Primary",
     kind: "Physical",
     trait: "Strength",
@@ -4772,7 +4772,7 @@ export const westernWeapons = [
   },
   {
     tier: 3,
-    name: "Lasso",
+    name: "Advanced Lasso",
     category: "Secondary",
     kind: "Physical",
     trait: "Agility",
@@ -4787,7 +4787,7 @@ export const westernWeapons = [
   },
   {
     tier: 3,
-    name: "Small Revolver",
+    name: "Advanced Small Revolver",
     category: "Secondary",
     kind: "Physical",
     trait: "Finesse",
@@ -4801,7 +4801,7 @@ export const westernWeapons = [
   },
   {
     tier: 4,
-    name: "Revolver",
+    name: "Legendary Revolver",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -4816,7 +4816,7 @@ export const westernWeapons = [
   },
   {
     tier: 4,
-    name: "Rifle",
+    name: "Legendary Rifle",
     category: "Primary",
     kind: "Physical",
     trait: "Agility",
@@ -4830,7 +4830,7 @@ export const westernWeapons = [
   },
   {
     tier: 4,
-    name: "Shotgun",
+    name: "Legendary Shotgun",
     category: "Primary",
     kind: "Physical",
     trait: "Strength",
@@ -4845,7 +4845,7 @@ export const westernWeapons = [
   },
   {
     tier: 4,
-    name: "Lasso",
+    name: "Legendary Lasso",
     category: "Secondary",
     kind: "Physical",
     trait: "Agility",
@@ -4860,7 +4860,7 @@ export const westernWeapons = [
   },
   {
     tier: 4,
-    name: "Small Revolver",
+    name: "Legendary Small Revolver",
     category: "Secondary",
     kind: "Physical",
     trait: "Finesse",
@@ -4872,7 +4872,7 @@ export const westernWeapons = [
       description: "Spend 2 Hope to gain a +4 bonus to primary weapon damage.",
     },
   },
-] satisfies Weapon[];
+] as const satisfies readonly Weapon[];
 
 export const monsterHuntingWeapons = [
   {
@@ -4963,7 +4963,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Blessed Brass Knuckles",
+    name: "Improved Blessed Brass Knuckles",
     category: "Primary",
     kind: "Magic",
     trait: "Strength",
@@ -4974,7 +4974,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Holy Shotgun",
+    name: "Improved Holy Shotgun",
     category: "Primary",
     kind: "Magic",
     trait: "Agility",
@@ -4989,7 +4989,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Repeating Crossbow",
+    name: "Improved Repeating Crossbow",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -5004,7 +5004,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Wooden Stake",
+    name: "Improved Wooden Stake",
     category: "Secondary",
     kind: "Physical",
     trait: "Strength",
@@ -5019,7 +5019,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Hallowed Shield",
+    name: "Improved Hallowed Shield",
     category: "Secondary",
     kind: "Magic",
     trait: "Instinct",
@@ -5034,7 +5034,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 2,
-    name: "Chain Whip",
+    name: "Improved Chain Whip",
     category: "Secondary",
     kind: "Physical",
     trait: "Presence",
@@ -5049,7 +5049,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Blessed Brass Knuckles",
+    name: "Advanced Blessed Brass Knuckles",
     category: "Primary",
     kind: "Magic",
     trait: "Strength",
@@ -5060,7 +5060,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Holy Shotgun",
+    name: "Advanced Holy Shotgun",
     category: "Primary",
     kind: "Magic",
     trait: "Agility",
@@ -5075,7 +5075,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Repeating Crossbow",
+    name: "Advanced Repeating Crossbow",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -5090,7 +5090,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Wooden Stake",
+    name: "Advanced Wooden Stake",
     category: "Secondary",
     kind: "Physical",
     trait: "Strength",
@@ -5105,7 +5105,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Hallowed Shield",
+    name: "Advanced Hallowed Shield",
     category: "Secondary",
     kind: "Magic",
     trait: "Instinct",
@@ -5120,7 +5120,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 3,
-    name: "Chain Whip",
+    name: "Advanced Chain Whip",
     category: "Secondary",
     kind: "Physical",
     trait: "Presence",
@@ -5135,7 +5135,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Blessed Brass Knuckles",
+    name: "Legendary Blessed Brass Knuckles",
     category: "Primary",
     kind: "Magic",
     trait: "Strength",
@@ -5146,7 +5146,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Holy Shotgun",
+    name: "Legendary Holy Shotgun",
     category: "Primary",
     kind: "Magic",
     trait: "Agility",
@@ -5161,7 +5161,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Repeating Crossbow",
+    name: "Legendary Repeating Crossbow",
     category: "Primary",
     kind: "Physical",
     trait: "Finesse",
@@ -5176,7 +5176,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Wooden Stake",
+    name: "Legendary Wooden Stake",
     category: "Secondary",
     kind: "Physical",
     trait: "Strength",
@@ -5191,7 +5191,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Hallowed Shield",
+    name: "Legendary Hallowed Shield",
     category: "Secondary",
     kind: "Magic",
     trait: "Instinct",
@@ -5206,7 +5206,7 @@ export const monsterHuntingWeapons = [
   },
   {
     tier: 4,
-    name: "Chain Whip",
+    name: "Legendary Chain Whip",
     category: "Secondary",
     kind: "Physical",
     trait: "Presence",
@@ -5219,4 +5219,22 @@ export const monsterHuntingWeapons = [
         "On a successful attack, you can pull the target into Melee range.",
     },
   },
-] satisfies Weapon[];
+] as const satisfies readonly Weapon[];
+
+export const classFeatureWeapons = [
+  {
+    tier: 1,
+    name: "Brawler's Strike",
+    category: "Primary",
+    kind: "Physical",
+    trait: "Any",
+    range: "Melee",
+    damage: { roll: "d8+d6", type: "phy" },
+    burden: null,
+    feature: {
+      name: "I Am the Weapon",
+      description:
+        "Your barehanded attacks are as strong as any blade. You have a primary weapon called Brawler's Strike equipped while you have no other Active Weapons. It uses a trait of your choice, has Melee range, and deals d8+d6 physical damage using your Proficiency (both the d8 and d6 scale off your Proficiency). While this weapon is active, you gain a +1 bonus to your Evasion.",
+    },
+  },
+] as const satisfies readonly Weapon[];

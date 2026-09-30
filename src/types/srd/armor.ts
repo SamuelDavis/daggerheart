@@ -667,7 +667,7 @@ export const armor = [
       description: "-1 to all character traits and Evasion",
     },
   },
-] satisfies Armor[];
+] as const satisfies readonly Armor[];
 
 export const everydayHeroArmor = [
   {
@@ -701,7 +701,7 @@ export const everydayHeroArmor = [
       description: "-2 to Evasion; -1 to Agility",
     },
   },
-] satisfies Armor[];
+] as const satisfies readonly Armor[];
 
 export const monsterHuntingArmor = [
   {
@@ -738,7 +738,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 2,
-    name: "Coffinwood Armor",
+    name: "Improved Coffinwood Armor",
     baseThresholds: { major: 6, severe: 15 },
     baseScore: 4,
     feature: {
@@ -749,7 +749,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 2,
-    name: "Leather Longcoat",
+    name: "Improved Leather Longcoat",
     baseThresholds: { major: 8, severe: 18 },
     baseScore: 4,
     feature: {
@@ -759,7 +759,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 2,
-    name: "Silverweave Armor",
+    name: "Improved Silverweave Armor",
     baseThresholds: { major: 7, severe: 16 },
     baseScore: 4,
     feature: {
@@ -770,7 +770,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 3,
-    name: "Coffinwood Armor",
+    name: "Advanced Coffinwood Armor",
     baseThresholds: { major: 8, severe: 22 },
     baseScore: 5,
     feature: {
@@ -781,7 +781,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 3,
-    name: "Leather Longcoat",
+    name: "Advanced Leather Longcoat",
     baseThresholds: { major: 10, severe: 25 },
     baseScore: 5,
     feature: {
@@ -791,7 +791,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 3,
-    name: "Silverweave Armor",
+    name: "Advanced Silverweave Armor",
     baseThresholds: { major: 9, severe: 23 },
     baseScore: 5,
     feature: {
@@ -802,7 +802,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 4,
-    name: "Coffinwood Armor",
+    name: "Legendary Coffinwood Armor",
     baseThresholds: { major: 10, severe: 31 },
     baseScore: 6,
     feature: {
@@ -813,7 +813,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 4,
-    name: "Leather Longcoat",
+    name: "Legendary Leather Longcoat",
     baseThresholds: { major: 12, severe: 34 },
     baseScore: 6,
     feature: {
@@ -823,7 +823,7 @@ export const monsterHuntingArmor = [
   },
   {
     tier: 4,
-    name: "Silverweave Armor",
+    name: "Legendary Silverweave Armor",
     baseThresholds: { major: 11, severe: 32 },
     baseScore: 6,
     feature: {
@@ -832,4 +832,4 @@ export const monsterHuntingArmor = [
         "You reduce incoming magic damage by your Armor Score before applying it to your damage thresholds. TRANSFORMATIONS",
     },
   },
-] satisfies Armor[];
+] as const satisfies readonly Armor[];

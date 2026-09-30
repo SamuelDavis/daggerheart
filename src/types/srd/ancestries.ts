@@ -400,4 +400,4 @@ export const ancestries = [
       },
     ],
   },
-] satisfies Ancestry[];
+] as const satisfies readonly Ancestry[];

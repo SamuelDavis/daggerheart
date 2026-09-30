@@ -26,15 +26,20 @@ import {
   type Armor,
   type Class,
   type ComboDie,
-  type DedicatedPrinciples,
   type DomainCard,
   type DualityDieValue,
   type Feature,
-  type MartialArtistStances,
-  type Patron,
-  type PlayerCharacter,
-  type PurposefulDesign,
+  type Ancestry,
+  type Community,
+  type Experience,
+  type MartialStance,
+  type OrderbornePrinciple,
   type RangerCompanion,
+  type Trait,
+  type TraitModifier,
+  type Transformation,
+  type WarlockPatron,
+  type PurposefulDesign,
   type SorcererElement,
   type Subclass,
   type Weapon,
@@ -55,15 +60,45 @@ import {
   type Targeted,
 } from "@samueldavis/solidlib";
 
+type PlayerCharacter = {
+  name: string;
+  pronouns: string;
+  description: string;
+  subclass: Subclass["name"];
+  primaryAncestry: Ancestry["name"];
+  secondaryAncestry: null | Ancestry["name"];
+  heritage: string;
+  community: Community["name"];
+  transformation: null | Transformation["name"];
+  traits: Record<Trait, TraitModifier>;
+  primaryWeapon: Weapon["name"];
+  secondaryWeapon: null | Weapon["name"];
+  armor: Armor["name"];
+  consumable: string;
+  classItem: string;
+  background: string;
+  experiences: [Experience["name"], Experience["name"]];
+  domainCards: [DomainCard["name"], DomainCard["name"]];
+  connections: string;
+};
+
+type DedicatedPrinciples = [
+  OrderbornePrinciple,
+  OrderbornePrinciple,
+  OrderbornePrinciple,
+];
+
 type CharacterExtras = {
   comboDie?: ComboDie;
-  stances?: MartialArtistStances["known"];
-  companion?: Omit<RangerCompanion, "stressSlots" | "markedStress">;
+  stances?: MartialStance["name"][];
+  companion?: Omit<RangerCompanion, "stressSlots">;
   sorcererElement?: SorcererElement;
-  patron?: Patron;
+  patron?: WarlockPatron;
   favor?: number;
   strangePatterns?: DualityDieValue;
-  purposefulDesign?: PurposefulDesign;
+  purposefulDesign?: Omit<PurposefulDesign, "experience"> & {
+    experience: 0 | 1;
+  };
   breathElement?: string;
   dedicatedPrinciples?: DedicatedPrinciples;
 };
@@ -95,7 +130,9 @@ function groupWeaponsByTrait(category: Weapon["category"]): WeaponGroup[] {
 }
 
 function findClass(subclass: Subclass["name"]): Class {
-  const characterClass = classes.find((c) => c.subclasses.includes(subclass));
+  const characterClass = classes.find((c: Class) =>
+    c.subclasses.includes(subclass),
+  );
   assert(isNonNullable, characterClass);
   return characterClass;
 }

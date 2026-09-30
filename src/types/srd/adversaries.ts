@@ -265,4 +265,4 @@ export const adversaryIndex = [
   { name: "Xero the Castle Killer", tier: 4 },
   { name: "Perfected Zombie", tier: 4 },
   { name: "Zombie Legion", tier: 4 },
-] satisfies AdversaryReference[];
+] as const satisfies readonly AdversaryReference[];

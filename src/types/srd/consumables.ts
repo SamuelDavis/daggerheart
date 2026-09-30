@@ -758,4 +758,4 @@ export const consumables = [
       "You can drink this potion to slough off your outer layer of skin and heal a scar.",
     set: "Hope & Fear",
   },
-] satisfies Consumable[];
+] as const satisfies readonly Consumable[];

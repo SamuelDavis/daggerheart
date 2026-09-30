@@ -919,4 +919,4 @@ export const subclasses = [
       },
     ],
   },
-] satisfies Subclass[];
+] as const satisfies readonly Subclass[];

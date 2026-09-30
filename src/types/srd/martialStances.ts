@@ -95,4 +95,4 @@ export const martialStances = [
     description:
       "Gain advantage on attack rolls when there are no other creatures within Very Close range of you or your target.",
   },
-] satisfies MartialStance[];
+] as const satisfies readonly MartialStance[];

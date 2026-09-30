@@ -103,4 +103,4 @@ export const transformations = [
       },
     ],
   },
-] satisfies Transformation[];
+] as const satisfies readonly Transformation[];
