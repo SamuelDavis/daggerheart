@@ -1,3 +1,8 @@
+import {
+  comboDice,
+  exampleSpheresOfInfluence,
+  strangePatternsNumbers,
+} from "./extras";
 import type { Class } from ".";
 
 export const classes = [
@@ -58,6 +63,14 @@ export const classes = [
         name: "Rally",
         description:
           "Once per session, describe how you rally the party and give yourself and each of your allies a Rally Die. At level 1, your Rally Die is a d6. A PC can spend their Rally Die to roll it, adding the result to their action roll, reaction roll, damage roll, or to clear a number of Stress equal to the result. At the end of each session, clear all unspent Rally Dice. At level 5, your Rally Die increases to a d8.",
+        grants: [
+          {
+            kind: "die",
+            name: "Rally Die",
+            progression: [{ level: 1, value: "d6" }, { level: 5, value: "d8" }],
+            steps: null,
+          },
+        ],
       },
     ],
     subclasses: ["Troubadour", "Wordsmith"],
@@ -90,11 +103,20 @@ export const classes = [
         name: "I Am the Weapon",
         description:
           "Your barehanded attacks are as strong as any blade. You have a primary weapon called Brawler's Strike equipped while you have no other Active Weapons. It uses a trait of your choice, has Melee range, and deals d8+d6 physical damage using your Proficiency (both the d8 and d6 scale off your Proficiency). While this weapon is active, you gain a +1 bonus to your Evasion.",
+        grants: [{ kind: "weapon", weapon: "Brawler's Strike" }],
       },
       {
         name: "Combo Strike",
         description:
           "After rolling damage on a successful attack with a Melee weapon, you can mark a Stress to start a combo strike. When you do, roll your Combo Die and note the result, then continue rolling your Combo Die until the result of your latest roll is lower than the roll that preceded it. You deal extra damage equal to the total of all rolled Combo Die results on this attack. The results can't be modified by any means.\nYour Combo Die starts as a d4. Once per tier, you can increase your Combo Die by one step as a level advancement option.",
+        grants: [
+          {
+            kind: "die",
+            name: "Combo Die",
+            progression: [{ level: 1, value: "d4" }],
+            steps: comboDice,
+          },
+        ],
       },
     ],
     subclasses: ["Juggernaut", "Martial Artist"],
@@ -166,6 +188,14 @@ export const classes = [
         name: "Unstoppable",
         description:
           "Once per long rest, you can become Unstoppable. You gain an Unstoppable Die. At level 1, your Unstoppable Die is a d4. Place it on your character sheet in the space provided, starting with the 1 value facing up. After you make a damage roll that deals 1 or more Hit Points to a target, increase the Unstoppable Die value by one. When the die's value would exceed its maximum value or when the scene ends, remove the die and drop out of Unstoppable. At level 5, your Unstoppable Die increases to a d6.\nWhile Unstoppable, you gain the following benefits:\n• You reduce the severity of physical damage by one threshold (Severe to Major, Major to Minor, Minor to None).\n• You add the current value of the Unstoppable Die to your damage roll.\n• You can't be Restrained or Vulnerable.",
+        grants: [
+          {
+            kind: "die",
+            name: "Unstoppable Die",
+            progression: [{ level: 1, value: "d4" }, { level: 5, value: "d6" }],
+            steps: null,
+          },
+        ],
       },
     ],
     subclasses: ["Stalwart", "Vengeance"],
@@ -267,6 +297,15 @@ export const classes = [
         name: "Prayer Dice",
         description:
           "At the beginning of each session, roll a number of d4s equal to your subclass's Spellcast trait and place them on your character sheet in the space provided. These are your Prayer Dice. You can spend any number of Prayer Dice to aid yourself or an ally within Far range. You can use a spent die's value to reduce incoming damage, add to a roll's result after the roll is made, or gain Hope equal to the result. At the end of each session, clear all unspent Prayer Dice.",
+        grants: [
+          {
+            kind: "dicePool",
+            name: "Prayer Dice",
+            die: "d4",
+            count: { equals: "spellcastTrait" },
+            max: null,
+          },
+        ],
       },
     ],
     subclasses: ["Divine Wielder", "Winged Sentinel"],
@@ -344,11 +383,34 @@ export const classes = [
         name: "Patron's Pact",
         description:
           "You have committed yourself to a supernatural entity-such as a god, fae, or demon-in exchange for power. Write their name on your character sheet, then work with your GM to determine their sphere of influence (such as Nature, Chaos, Wisdom, Mischief, Love, War, Justice, or Death). Before making an action roll that relates to your patron's sphere of influence, you can spend a Favor to call upon their aid, rolling your Patron Die and adding its result to the total. Your Patron Die starts at a d6 and increases to a d8 at level 5.",
+        grants: [
+          {
+            kind: "record",
+            name: "Patron",
+            count: 1,
+            options: null,
+            allowCustom: true,
+          },
+          {
+            kind: "record",
+            name: "Sphere of Influence",
+            count: 1,
+            options: exampleSpheresOfInfluence,
+            allowCustom: true,
+          },
+          {
+            kind: "die",
+            name: "Patron Die",
+            progression: [{ level: 1, value: "d6" }, { level: 5, value: "d8" }],
+            steps: null,
+          },
+        ],
       },
       {
         name: "Favor",
         description:
           "You start with 3 Favor. You can use a downtime move to show tribute to your patron. Describe how and gain Favor equal to your Spellcast trait. Additionally, when you succeed on an action roll with Hope, you can choose to gain a Favor instead of a Hope.\nNote: The maximum Favor you can hold at one time is 6.",
+        grants: [{ kind: "tokens", name: "Favor", starting: 3, max: 6 }],
       },
     ],
     subclasses: ["Pact of the Endless", "Pact of the Wrathful"],
@@ -463,6 +525,15 @@ export const classes = [
         name: "Strange Patterns",
         description:
           "Choose a number between 1 and 12. When you roll that number on a Duality Die, gain a Hope or clear a Stress.\nYou can change this number when you take a long rest.",
+        grants: [
+          {
+            kind: "record",
+            name: "Strange Patterns",
+            count: 1,
+            options: strangePatternsNumbers,
+            allowCustom: false,
+          },
+        ],
       },
     ],
     subclasses: ["School of Knowledge", "School of War"],

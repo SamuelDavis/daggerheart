@@ -1,3 +1,4 @@
+import { sorcererElements } from "./extras";
 import type { Subclass } from ".";
 
 export const subclasses = [
@@ -137,6 +138,14 @@ export const subclasses = [
         name: "Epic Poetry",
         description:
           "Your Rally Die increases to a d10. Additionally, when you Help an Ally, you can narrate the moment as if you were writing the tale of their heroism in a memoir. When you do, roll a d10 as your advantage die.",
+        grants: [
+          {
+            kind: "die",
+            name: "Rally Die",
+            progression: [{ level: 1, value: "d10" }],
+            steps: null,
+          },
+        ],
       },
     ],
   },
@@ -151,6 +160,7 @@ export const subclasses = [
         name: "Rugged",
         description:
           "Gain a permanent +3 bonus to your Severe damage threshold.",
+        grants: [{ kind: "damageThresholds", amount: 3, thresholds: ["severe"] }],
       },
       {
         name: "Overwhelm",
@@ -194,6 +204,10 @@ export const subclasses = [
         name: "Stance Fighter",
         description:
           "You can channel your inner resolve to shift into martial stances that grant you special benefits in combat.\nTake the Martial Stances sheet and choose two martial stances from Tier 1. Each time you level up your character, choose an additional stance from your tier or lower.",
+        grants: [
+          { kind: "martialStances", count: 2, perLevel: 1, maxTier: 1 },
+          { kind: "tokens", name: "Focus", starting: 0, max: 6 },
+        ],
       },
     ],
     specialization: [
@@ -297,6 +311,13 @@ export const subclasses = [
       {
         name: "Unwavering",
         description: "Gain a permanent +1 bonus to your damage thresholds.",
+        grants: [
+          {
+            kind: "damageThresholds",
+            amount: 1,
+            thresholds: ["major", "severe"],
+          },
+        ],
       },
       {
         name: "Iron Will",
@@ -308,6 +329,13 @@ export const subclasses = [
       {
         name: "Unrelenting",
         description: "Gain a permanent +2 bonus to your damage thresholds.",
+        grants: [
+          {
+            kind: "damageThresholds",
+            amount: 2,
+            thresholds: ["major", "severe"],
+          },
+        ],
       },
       {
         name: "Partners-in-Arms",
@@ -319,6 +347,13 @@ export const subclasses = [
       {
         name: "Undaunted",
         description: "Gain a permanent +3 bonus to your damage thresholds.",
+        grants: [
+          {
+            kind: "damageThresholds",
+            amount: 3,
+            thresholds: ["major", "severe"],
+          },
+        ],
       },
       {
         name: "Loyal Protector",
@@ -337,6 +372,7 @@ export const subclasses = [
       {
         name: "At Ease",
         description: "Gain an additional Stress slot.",
+        grants: [{ kind: "stressSlots", amount: 1 }],
       },
       {
         name: "Revenge",
@@ -370,12 +406,24 @@ export const subclasses = [
         name: "Companion",
         description:
           "You have an animal companion of your choice (at the GM's discretion). They stay by your side unless you tell them otherwise.\nTake the Ranger Companion sheet. When you level up your character, choose a level-up option for your companion from this sheet as well.",
+        grants: [
+          {
+            kind: "companion",
+            count: 1,
+            evasion: 10,
+            experiences: { count: 2, modifier: 2 },
+            damageDie: "d6",
+            range: "Melee",
+            damageTypes: ["phy", "mag"],
+          },
+        ],
       },
     ],
     specialization: [
       {
         name: "Expert Training",
         description: "Choose an additional level-up option for your companion.",
+        grants: [{ kind: "companionUpgrades", count: 1 }],
       },
       {
         name: "Battle-Bonded",
@@ -388,6 +436,7 @@ export const subclasses = [
         name: "Advanced Training",
         description:
           "Choose two additional level-up options for your companion.",
+        grants: [{ kind: "companionUpgrades", count: 2 }],
       },
       {
         name: "Loyal Friend",
@@ -459,6 +508,7 @@ export const subclasses = [
         name: "Fleeting Shadow",
         description:
           'Gain a permanent +1 bonus to your Evasion. You can use your "Shadow Stepper" feature to move within Very Far range.',
+        grants: [{ kind: "evasion", amount: 1 }],
       },
       {
         name: "Vanishing Act",
@@ -553,6 +603,7 @@ export const subclasses = [
         name: "Ascendant",
         description:
           "Gain a permanent +4 bonus to your Severe damage threshold.",
+        grants: [{ kind: "damageThresholds", amount: 4, thresholds: ["severe"] }],
       },
       {
         name: "Power of the Gods",
@@ -572,6 +623,15 @@ export const subclasses = [
         name: "Elementalist",
         description:
           "Choose one of the following elements at character creation: air, earth, fire, lightning, water.\nYou can shape this element into harmless effects. Additionally, spend a Hope and describe how your control over this element helps an action roll you're about to make, then either gain a +2 bonus to the roll or a +3 bonus to the roll's damage.",
+        grants: [
+          {
+            kind: "record",
+            name: "Element",
+            count: 1,
+            options: sorcererElements,
+            allowCustom: false,
+          },
+        ],
       },
     ],
     specialization: [
@@ -746,6 +806,15 @@ export const subclasses = [
         name: "Slayer",
         description:
           "You gain a pool of dice called Slayer Dice. On a roll with Hope, you can place a d6 on this card instead of gaining a Hope, adding the die to the pool. You can store a number of Slayer Dice equal to your Proficiency. When you make an attack roll or damage roll, you can spend any number of these Slayer Dice, rolling them and adding their result to the roll. At the end of each session, clear any unspent Slayer Dice on this card and gain a Hope per die cleared.",
+        grants: [
+          {
+            kind: "dicePool",
+            name: "Slayer Dice",
+            die: "d6",
+            count: null,
+            max: { equals: "proficiency" },
+          },
+        ],
       },
     ],
     specialization: [
@@ -844,6 +913,7 @@ export const subclasses = [
         name: "Prepared",
         description:
           "Take an additional domain card of your level or lower from a domain you have access to.",
+        grants: [{ kind: "domainCards", count: 1 }],
       },
       {
         name: "Adept",
@@ -856,6 +926,7 @@ export const subclasses = [
         name: "Accomplished",
         description:
           "Take an additional domain card of your level or lower from a domain you have access to.",
+        grants: [{ kind: "domainCards", count: 1 }],
       },
       {
         name: "Perfect Recall",
@@ -868,6 +939,7 @@ export const subclasses = [
         name: "Brilliant",
         description:
           "Take an additional domain card of your level or lower from a domain you have access to.",
+        grants: [{ kind: "domainCards", count: 1 }],
       },
       {
         name: "Honed Expertise",
@@ -887,6 +959,7 @@ export const subclasses = [
         name: "Battlemage",
         description:
           "You've focused your studies on becoming an unconquerable force on the battlefield. Gain an additional Hit Point slot.",
+        grants: [{ kind: "hitPointSlots", amount: 1 }],
       },
       {
         name: "Face Your Fear",

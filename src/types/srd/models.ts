@@ -20,9 +20,68 @@ import type {
   WeaponKind,
 } from ".";
 
+export type GrantValue =
+  | number
+  | { equals: "spellcastTrait" | "proficiency" | "tier" | "level" };
+
+export type GrantedRoll = "action" | "reaction" | "attack" | "damage";
+
+export type Grant =
+  | { kind: "hitPointSlots"; amount: number }
+  | { kind: "stressSlots"; amount: number }
+  | { kind: "hopeSlots"; amount: number }
+  | { kind: "evasion"; amount: GrantValue }
+  | { kind: "armorScore"; amount: GrantValue }
+  | {
+      kind: "damageThresholds";
+      amount: GrantValue;
+      thresholds: readonly (keyof Thresholds)[];
+    }
+  | { kind: "rollBonus"; amount: GrantValue; rolls: readonly GrantedRoll[] }
+  | { kind: "experienceBonus"; amount: number; experiences: number }
+  | { kind: "domainCards"; count: number }
+  | { kind: "weapon"; weapon: Weapon["name"] }
+  | {
+      kind: "die";
+      name: string;
+      progression: LevelScaled<Die>;
+      steps: readonly Die[] | null;
+    }
+  | {
+      kind: "dicePool";
+      name: string;
+      die: Die;
+      count: GrantValue | null;
+      max: GrantValue | null;
+    }
+  | { kind: "tokens"; name: string; starting: number; max: GrantValue | null }
+  | {
+      kind: "record";
+      name: string;
+      count: number | null;
+      options: readonly string[] | null;
+      allowCustom: boolean;
+    }
+  | {
+      kind: "companion";
+      count: number;
+      evasion: number;
+      experiences: { count: number; modifier: number };
+      damageDie: Die;
+      range: Range;
+      damageTypes: readonly DamageType[];
+    }
+  | { kind: "companionUpgrades"; count: number }
+  | { kind: "companionEvasion"; amount: number }
+  | { kind: "companionStressSlots"; amount: number }
+  | { kind: "companionExperienceBonus"; amount: number; experiences: number }
+  | { kind: "companionAttackStep"; steps: number }
+  | { kind: "martialStances"; count: number; perLevel: number; maxTier: Tier };
+
 export type Feature = {
   name: string;
   description: string;
+  grants?: readonly Grant[];
 };
 
 export type Thresholds = {
@@ -189,24 +248,9 @@ export type WarlockPatron = {
   sphereOfInfluence: string;
 };
 
-export type PatronDie = Die;
-
-export type PrayerDice = {
-  die: Die;
-  count: number;
-};
-
-export type RallyDie = Die;
-
-export type UnstoppableDie = Die;
-
 export type ComboDie = Die;
 
-export type KnownMartialStances = readonly MartialStance["name"][];
-
 export type SorcererElement = string;
-
-export type StrangePatternsNumber = number;
 
 export type OrderbornePrinciple = string;
 
@@ -217,10 +261,6 @@ export type PurposefulDesign = {
 };
 
 export type DrakonaBreathElement = string;
-
-export type UnfinishedBusiness = string;
-
-export type OnlySkinDeepFeature = Feature["name"];
 
 export type LevelScaled<T> = readonly { level: Level; value: T }[];
 

@@ -1,18 +1,4 @@
-import type {
-  ComboDie,
-  DrakonaBreathElement,
-  LevelScaled,
-  PatronDie,
-  PrayerDice,
-  RallyDie,
-  SorcererElement,
-  UnstoppableDie,
-} from ".";
-
-export const rallyDieByLevel = [
-  { level: 1, value: "d6" },
-  { level: 5, value: "d8" },
-] as const satisfies LevelScaled<RallyDie>;
+import type { ComboDie, DrakonaBreathElement, SorcererElement } from ".";
 
 export const comboDice = [
   "d4",
@@ -20,24 +6,6 @@ export const comboDice = [
   "d8",
   "d10",
 ] as const satisfies readonly ComboDie[];
-
-export const defaultComboDie = "d4" satisfies ComboDie;
-
-export const unstoppableDieByLevel = [
-  { level: 1, value: "d4" },
-  { level: 5, value: "d6" },
-] as const satisfies LevelScaled<UnstoppableDie>;
-
-export const defaultPrayerDie = "d4" satisfies PrayerDice["die"];
-
-export const patronDieByLevel = [
-  { level: 1, value: "d6" },
-  { level: 5, value: "d8" },
-] as const satisfies LevelScaled<PatronDie>;
-
-export const defaultStartingFavor = 3;
-
-export const defaultMaxFavor = 6;
 
 export const exampleSpheresOfInfluence = [
   "Ambition",
@@ -66,14 +34,6 @@ export const exampleSpheresOfInfluence = [
   "Wisdom",
 ] as const satisfies readonly string[];
 
-export const defaultStartingMartialStanceCount = 2;
-
-export const defaultStartingMartialStanceTier = 1;
-
-export const defaultMartialStancesGainedPerLevel = 1;
-
-export const defaultMaxFocus = 6;
-
 export const sorcererElements = [
   "air",
   "earth",
@@ -82,12 +42,23 @@ export const sorcererElements = [
   "water",
 ] as const satisfies readonly SorcererElement[];
 
-export const defaultOrderbornePrinciplesCount = 3;
-
-export const defaultPurposefulDesignExperienceBonus = 1;
-
 export const exampleDrakonaBreathElements = [
   "electricity",
   "fire",
   "ice",
 ] as const satisfies readonly DrakonaBreathElement[];
+
+export const strangePatternsNumbers = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+] as const satisfies readonly string[];

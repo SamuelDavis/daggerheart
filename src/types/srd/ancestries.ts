@@ -1,3 +1,4 @@
+import { exampleDrakonaBreathElements } from "./extras";
 import type { Ancestry } from ".";
 
 export const ancestries = [
@@ -27,6 +28,23 @@ export const ancestries = [
         name: "Purposeful Design",
         description:
           "Decide who made you and for what purpose. At character creation, choose one of your Experiences that best aligns with this purpose and gain a permanent +1 bonus to it.",
+        grants: [
+          {
+            kind: "record",
+            name: "Maker",
+            count: 1,
+            options: null,
+            allowCustom: true,
+          },
+          {
+            kind: "record",
+            name: "Purpose",
+            count: 1,
+            options: null,
+            allowCustom: true,
+          },
+          { kind: "experienceBonus", amount: 1, experiences: 1 },
+        ],
       },
       {
         name: "Efficient",
@@ -49,6 +67,15 @@ export const ancestries = [
         name: "Elemental Breath",
         description:
           "Choose an element for your breath (such as electricity, fire, or ice). You can use this breath against a target or group of targets within Very Close range, treating it as an Instinct weapon that deals d8 magic damage using your Proficiency.",
+        grants: [
+          {
+            kind: "record",
+            name: "Breath Element",
+            count: 1,
+            options: exampleDrakonaBreathElements,
+            allowCustom: true,
+          },
+        ],
       },
     ],
   },
@@ -77,6 +104,14 @@ export const ancestries = [
         name: "Stoneskin",
         description:
           "Gain a permanent +1 bonus to your Armor Score and damage thresholds at character creation.",
+        grants: [
+          { kind: "armorScore", amount: 1 },
+          {
+            kind: "damageThresholds",
+            amount: 1,
+            thresholds: ["major", "severe"],
+          },
+        ],
       },
       {
         name: "Immovable",
@@ -194,6 +229,13 @@ export const ancestries = [
         name: "Shell",
         description:
           "Gain a bonus to your damage thresholds equal to your Proficiency.",
+        grants: [
+          {
+            kind: "damageThresholds",
+            amount: { equals: "proficiency" },
+            thresholds: ["major", "severe"],
+          },
+        ],
       },
       {
         name: "Retract",
@@ -210,6 +252,7 @@ export const ancestries = [
       {
         name: "Endurance",
         description: "Gain an additional Hit Point slot at character creation.",
+        grants: [{ kind: "hitPointSlots", amount: 1 }],
       },
       {
         name: "Reach",
@@ -275,6 +318,7 @@ export const ancestries = [
       {
         name: "High Stamina",
         description: "Gain an additional Stress slot at character creation.",
+        grants: [{ kind: "stressSlots", amount: 1 }],
       },
       {
         name: "Adaptability",
@@ -364,6 +408,7 @@ export const ancestries = [
         name: "Nimble",
         description:
           "Gain a permanent +1 bonus to your Evasion at character creation.",
+        grants: [{ kind: "evasion", amount: 1 }],
       },
     ],
   },

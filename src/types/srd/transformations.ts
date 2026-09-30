@@ -10,6 +10,13 @@ export const transformations = [
         name: "Gifted",
         description:
           "You gain a +1 bonus to action, reaction, and damage rolls.",
+        grants: [
+          {
+            kind: "rollBonus",
+            amount: 1,
+            rolls: ["action", "reaction", "damage"],
+          },
+        ],
       },
       {
         name: "Weight of Divinity",
@@ -27,6 +34,15 @@ export const transformations = [
         name: "Unfinished Business",
         description:
           "Work with your GM to decide what purpose or desire keeps you bound to the Mortal Realm. When you fulfill it, you cross through the veil of death.",
+        grants: [
+          {
+            kind: "record",
+            name: "Unfinished Business",
+            count: 1,
+            options: null,
+            allowCustom: true,
+          },
+        ],
       },
       {
         name: "Ephemeral",
@@ -66,6 +82,15 @@ export const transformations = [
         name: "Only Skin Deep",
         description:
           "You gain the benefit of only one of your chosen ancestry's features, which you select when you choose the ancestry. You can use a downtime move to choose a different feature from that ancestry.",
+        grants: [
+          {
+            kind: "record",
+            name: "Ancestry Feature",
+            count: 1,
+            options: null,
+            allowCustom: false,
+          },
+        ],
       },
     ],
   },
