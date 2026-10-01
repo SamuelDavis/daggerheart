@@ -85,7 +85,6 @@ type Character = {
   description: string;
   background: string;
   connections: string;
-  class: Class["name"];
   subclass: Subclass["name"];
   ancestries: [top: Ancestry["name"], bottom: Ancestry["name"]];
   heritage: string;
@@ -283,15 +282,18 @@ function applyGuide(character: Character, guide: ClassGuide | undefined): void {
     : null;
 }
 
-function selectClass(character: Character, name: Class["name"]): void {
-  const next = lookup(classList, name);
-  character.class = name;
-  character.subclass = next.subclasses[0];
+function selectSubclass(character: Character, name: Subclass["name"]): void {
+  const previous = lookup(
+    classList,
+    lookup(subclassList, character.subclass).class,
+  );
+  const next = lookup(classList, lookup(subclassList, name).class);
+  character.subclass = name;
   character.domainCards = character.domainCards.filter((card) =>
     next.domains.includes(byName(cardList, card)?.domain ?? ""),
   );
-  if (!next.classItems.includes(character.classItem))
-    character.classItem = next.classItems[0];
+  if (previous.classItems.includes(character.classItem))
+    character.classItem = "";
 }
 
 function createCharacter(): Character {
@@ -302,7 +304,6 @@ function createCharacter(): Character {
     description: "",
     background: "",
     connections: "",
-    class: characterClass.name,
     subclass: characterClass.subclasses[0],
     ancestries: [ancestryList[0].name, ancestryList[0].name],
     heritage: "",
@@ -328,7 +329,7 @@ function createCharacter(): Character {
     secondaryWeapon: null,
     armor: null,
     consumable: characterCreationRules.startingConsumableChoices[0],
-    classItem: characterClass.classItems[0],
+    classItem: "",
     spellCarrier: "",
     inventory: [
       ...characterCreationRules.startingInventory,
@@ -346,7 +347,7 @@ function createCharacter(): Character {
     customFeatures: [],
     adjustments: {},
   };
-  applyGuide(character, findGuide(character.class));
+  applyGuide(character, findGuide(characterClass.name));
   return character;
 }
 
@@ -355,13 +356,13 @@ function parseCharacter(json: string): Character {
 }
 
 function deriveSheet(c: Character) {
-  const characterClass = lookup(classList, c.class);
   const subclass = lookup(subclassList, c.subclass);
+  const characterClass = lookup(classList, subclass.class);
   const top = lookup(ancestryList, c.ancestries[0]);
   const bottom = lookup(ancestryList, c.ancestries[1]);
   const community = lookup(communityList, c.community);
   const transformation = byName(transformationList, c.transformation);
-  const guide = findGuide(c.class);
+  const guide = findGuide(characterClass.name);
   const primary = byName(weaponList, c.primaryWeapon);
   const secondary = byName(weaponList, c.secondaryWeapon);
   const activeArmor = byName(armorList, c.armor);
@@ -806,6 +807,7 @@ function Builder(props: {
 function Toolbar() {
   const { character, setCharacter } = useCharacter();
   const [getError, setError] = createSignal<string>();
+  let fileInput: HTMLInputElement | undefined;
 
   function onSave(): void {
     const url = URL.createObjectURL(
@@ -847,15 +849,16 @@ function Toolbar() {
       <button type="button" onClick={onSave}>
         Save
       </button>
-      <label role="button" class="secondary mb-0">
+      <button type="button" class="secondary" onClick={() => fileInput?.click()}>
         Load
-        <input
-          type="file"
-          accept="application/json,.json"
-          hidden
-          onChange={onLoad}
-        />
-      </label>
+      </button>
+      <input
+        ref={fileInput}
+        type="file"
+        accept="application/json,.json"
+        hidden
+        onChange={onLoad}
+      />
       <button type="button" class="secondary" onClick={onReset}>
         Reset
       </button>
@@ -1242,55 +1245,49 @@ function StanceControl(props: { grant: GrantOf<"martialStances"> }) {
   );
 }
 
+const subclassOptions: Option[] = classList.flatMap((c) =>
+  c.subclasses.map((name) => ({
+    value: name,
+    label: `${name} ${c.name}`,
+    group: c.name,
+  })),
+);
+
 function ClassStep() {
   const { character, setCharacter, sheet } = useCharacter();
-  const subclassOptions = () =>
-    subclassList.filter((s) => s.class === character.class);
-
+  const classSources = () =>
+    sheet().sources.filter((s) => s.section === "class");
   return (
     <Step
       section="class"
       title="Class"
       value={`${sheet().subclass.name} ${sheet().characterClass.name}`}
     >
-      <div class="grid gap-x-4 sm:grid-cols-2">
-        <Select
-          label="Class"
-          value={character.class}
-          options={namedOptions(classList)}
-          onChange={(value) =>
-            value && setCharacter(produce((c) => selectClass(c, value)))
-          }
-        />
-        <Select
-          label="Subclass"
-          value={character.subclass}
-          options={namedOptions(subclassOptions())}
-          onChange={(value) => value && setCharacter("subclass", value)}
-        />
-      </div>
-      <Show when={sheet().guide}>
-        {(getGuide) => (
-          <p>
-            <em>{getGuide().summary}</em>
-          </p>
-        )}
-      </Show>
+      <Select
+        label="Class & Subclass"
+        value={character.subclass}
+        options={subclassOptions}
+        onChange={(value) =>
+          value && setCharacter(produce((c) => selectSubclass(c, value)))
+        }
+        hint={`Domains ${sheet().characterClass.domains.join(" & ")} · Evasion ${sheet().characterClass.startingEvasion} · HP ${sheet().characterClass.startingHitPoints} · Spellcast ${sheet().subclass.spellcastTrait ?? "none"}`}
+      />
       <p>
-        <small>
-          Domains {sheet().characterClass.domains.join(" & ")} · Evasion{" "}
-          {sheet().characterClass.startingEvasion} · HP{" "}
-          {sheet().characterClass.startingHitPoints} · Spellcast{" "}
-          {sheet().subclass.spellcastTrait ?? "none"}
-        </small>
+        <em>
+          {[sheet().guide?.summary, sheet().subclass.description]
+            .filter(Boolean)
+            .join(" ")}
+        </em>
       </p>
-      <Prose text={sheet().characterClass.description} summary="Class" />
-      <Prose text={sheet().subclass.description} summary="Subclass" />
-      <For each={sheet().sources.filter((s) => s.section === "class")}>
-        {(source) => (
-          <For each={source.features}>
-            {(feature) => <FeatureCard feature={feature} source={source.label} />}
-          </For>
+      <Prose text={sheet().characterClass.description} />
+      <For each={classSources().flatMap((s) => s.features)}>
+        {(feature) => (
+          <FeatureCard
+            feature={feature}
+            source={
+              classSources().find((s) => s.features.includes(feature))?.label
+            }
+          />
         )}
       </For>
     </Step>
@@ -1325,16 +1322,19 @@ function HeritageStep() {
       value={`${heritageLabel()} · ${sheet().community.name}${sheet().transformation ? ` · ${sheet().transformation?.name}` : ""}`}
     >
       <div class="grid gap-x-4 sm:grid-cols-2">
-        <Select
-          label={sheet().mixed ? "First feature from" : "Ancestry"}
-          value={character.ancestries[0]}
-          options={namedOptions(ancestryList)}
-          onChange={onAncestry}
-        />
+        <div>
+          <Select
+            label={sheet().mixed ? "First feature from" : "Ancestry"}
+            value={character.ancestries[0]}
+            options={namedOptions(ancestryList)}
+            onChange={onAncestry}
+          />
+          <Prose text={sheet().top.description} />
+        </div>
         <Show
           when={sheet().mixed}
           fallback={
-            <label class="self-center">
+            <label class="self-start sm:mt-9">
               <input
                 type="checkbox"
                 role="switch"
@@ -1345,12 +1345,15 @@ function HeritageStep() {
             </label>
           }
         >
-          <Select
-            label="Second feature from"
-            value={character.ancestries[1]}
-            options={namedOptions(ancestryList)}
-            onChange={(value) => value && setCharacter("ancestries", 1, value)}
-          />
+          <div>
+            <Select
+              label="Second feature from"
+              value={character.ancestries[1]}
+              options={namedOptions(ancestryList)}
+              onChange={(value) => value && setCharacter("ancestries", 1, value)}
+            />
+            <Prose text={sheet().bottom.description} />
+          </div>
         </Show>
       </div>
       <Show when={sheet().mixed}>
@@ -1376,10 +1379,6 @@ function HeritageStep() {
             Mixed ancestry
           </label>
         </div>
-      </Show>
-      <Prose text={sheet().top.description} summary={sheet().top.name} />
-      <Show when={sheet().mixed}>
-        <Prose text={sheet().bottom.description} summary={sheet().bottom.name} />
       </Show>
       <FeatureCard feature={sheet().top.features[0]} source={sheet().top.name} />
       <FeatureCard
@@ -1505,6 +1504,7 @@ function EquipmentStep() {
     ...weaponOptions("Primary", spellcaster()),
   ];
   const listId = createUniqueId();
+  const classItemListId = createUniqueId();
 
   return (
     <Step
@@ -1580,15 +1580,23 @@ function EquipmentStep() {
           )}
           onChange={(value) => value && setCharacter("consumable", value)}
         />
-        <Select
-          label="Class Item"
-          value={character.classItem}
-          options={sheet().characterClass.classItems.map((item) => ({
-            value: item,
-            label: item,
-          }))}
-          onChange={(value) => value && setCharacter("classItem", value)}
-        />
+        <label>
+          Class Item
+          <input
+            autocomplete="off"
+            list={classItemListId}
+            value={character.classItem}
+            onInput={(event) =>
+              setCharacter("classItem", event.currentTarget.value)
+            }
+          />
+          <datalist id={classItemListId}>
+            <For each={sheet().characterClass.classItems}>
+              {(item) => <option value={item} />}
+            </For>
+          </datalist>
+          <small>{sheet().characterClass.classItems.join(" · ")}</small>
+        </label>
       </div>
       <Show when={sheet().guide?.spellCarrier}>
         {(getCarrier) => (
@@ -1873,39 +1881,23 @@ function StoryStep() {
       </label>
       <label>
         Background
-        <ul>
-          <For each={sheet().characterClass.backgroundQuestions}>
-            {(question) => (
-              <li>
-                <small>{question}</small>
-              </li>
-            )}
-          </For>
-        </ul>
         <textarea
           value={character.background}
           onInput={(event) =>
             setCharacter("background", event.currentTarget.value)
           }
         />
+        <small>{sheet().characterClass.backgroundQuestions.join(" ")}</small>
       </label>
       <label>
         Connections
-        <ul>
-          <For each={sheet().characterClass.connectionQuestions}>
-            {(question) => (
-              <li>
-                <small>{question}</small>
-              </li>
-            )}
-          </For>
-        </ul>
         <textarea
           value={character.connections}
           onInput={(event) =>
             setCharacter("connections", event.currentTarget.value)
           }
         />
+        <small>{sheet().characterClass.connectionQuestions.join(" ")}</small>
       </label>
     </Step>
   );
