@@ -104,7 +104,7 @@ export const codex = [
     type: 'spell',
     recallCost: 2,
     text: 'Mark an adversary within Close range with a sigil of retribution. The GM gains a Fear. When the marked adversary deals damage to you or your allies, place a d8 on this card. You can hold a number of d8s equal to your level. When you successfully attack the marked adversary, roll the dice on this card and add the total to your damage roll, then clear the dice. This effect ends when the marked adversary is defeated or you cast Sigil of Retribution again.',
-    fields: [{ kind: 'counter', name: 'd8s', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'd8s', value: 0 }],
   },
   {
     name: 'Book of Homet',

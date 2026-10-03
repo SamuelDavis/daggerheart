@@ -7,38 +7,12 @@ import { RichText } from '../../content/RichText'
 import { creationGuidance } from '../../data/srd/characterCreation'
 import { srd } from '../../data/srd'
 import { findByName } from '../../data/srd/lookup'
-import type { Ancestry, Community, Feature, Transformation } from '../../types/srd'
+import type { Ancestry, Feature } from '../../types/srd'
 import { Field } from '../../ui/form'
-import { Grid, List, Section } from '../../ui/layout'
+import { List, Section } from '../../ui/layout'
 import { ToggleButton } from '../../ui/ToggleButton'
+import { Chooser } from '../Chooser'
 import { Guidance } from '../Guidance'
-
-type HeritageOption = Ancestry | Community | Transformation
-
-function OptionGrid<Option extends HeritageOption>(props: {
-  options: readonly Option[]
-  selected?: string
-  onSelect: (option: Option) => void
-}) {
-  return (
-    <Grid>
-      <For each={props.options}>
-        {(option) => (
-          <li>
-            <HeritageCard
-              option={option}
-              actions={
-                <ToggleButton pressed={props.selected === option.name} onClick={() => props.onSelect(option)} label={`Choose ${option.name}`}>
-                  Select
-                </ToggleButton>
-              }
-            />
-          </li>
-        )}
-      </For>
-    </Grid>
-  )
-}
 
 function AncestrySelect(props: { label: string; value?: string; onChange: (ancestry: Ancestry) => void }) {
   return (
@@ -97,55 +71,66 @@ export function HeritageStep() {
     Boolean(heritage().ancestry && !findByName(srd.ancestries.entries, heritage().ancestry?.name)),
   )
   const editField = (field: object, next: object) => change(replace(field, next))
+  const mixedToggle = () => (
+    <ToggleButton pressed={mixed()} onClick={() => setMixed(!mixed())}>
+      Mixed ancestry
+    </ToggleButton>
+  )
   const chosen = () => [heritage().ancestry, heritage().community, heritage().transformation].filter((option) => !!option)
 
   return (
     <>
       <Guidance text={creationGuidance.heritage} />
-      <Section
-        heading="Ancestry"
-        actions={
-          <ToggleButton pressed={mixed()} onClick={() => setMixed(!mixed())}>
-            Mixed ancestry
-          </ToggleButton>
+      <Show
+        when={mixed()}
+        fallback={
+          <Chooser
+            id="choose-ancestry"
+            heading="Ancestry"
+            options={srd.ancestries.entries}
+            selected={heritage().ancestry?.name}
+            onSelect={(ancestry) => change(chooseAncestry(ancestry))}
+            card={(ancestry, actions) => <HeritageCard option={ancestry} actions={actions} />}
+            actions={mixedToggle()}
+          />
         }
       >
-        <Show
-          when={mixed()}
-          fallback={
-            <OptionGrid options={srd.ancestries.entries} selected={heritage().ancestry?.name} onSelect={(ancestry) => change(chooseAncestry(ancestry))} />
-          }
-        >
+        <Section heading="Ancestry" actions={mixedToggle()}>
           <MixedAncestry current={heritage().ancestry} onMix={(first, second) => change(mixAncestries(first, second))} />
-        </Show>
-      </Section>
-      <Section heading="Community">
-        <OptionGrid
-          options={srd.communities.entries}
-          selected={heritage().community?.name}
-          onSelect={(community) => change(modify('heritage', (current) => ({ ...current, community })))}
-        />
-      </Section>
-      <Section heading="Transformation">
-        <details>
-          <summary>Optional, with your GM’s approval</summary>
-          <div class="stack">
-            <RichText text={creationGuidance.transformation} />
-            <OptionGrid
-              options={srd.transformations.entries}
-              selected={heritage().transformation?.name}
-              onSelect={(transformation) =>
-                change(
-                  modify('heritage', (current) => ({
-                    ...current,
-                    transformation: current.transformation?.name === transformation.name ? undefined : transformation,
-                  })),
-                )
-              }
-            />
-          </div>
-        </details>
-      </Section>
+        </Section>
+      </Show>
+      <Chooser
+        id="choose-community"
+        heading="Community"
+        options={srd.communities.entries}
+        selected={heritage().community?.name}
+        onSelect={(community) => change(modify('heritage', (current) => ({ ...current, community })))}
+        card={(community, actions) => <HeritageCard option={community} actions={actions} />}
+      />
+      <details class="guidance" open={Boolean(heritage().transformation)}>
+        <summary>Transformation (optional, with your GM’s approval)</summary>
+        <div class="stack">
+          <RichText text={creationGuidance.transformation} />
+          <Chooser
+            id="choose-transformation"
+            heading="Transformation"
+            options={srd.transformations.entries}
+            selected={heritage().transformation?.name}
+            onSelect={(transformation) => change(modify('heritage', (current) => ({ ...current, transformation })))}
+            card={(transformation, actions) => <HeritageCard option={transformation} actions={actions} />}
+            actions={
+              <Show when={heritage().transformation}>
+                <button
+                  type="button"
+                  onClick={() => change(modify('heritage', (current) => ({ ...current, transformation: undefined })))}
+                >
+                  Remove
+                </button>
+              </Show>
+            }
+          />
+        </div>
+      </details>
       <Show when={chosen().length}>
         <Section heading="Your heritage features">
           <List>
@@ -154,7 +139,7 @@ export function HeritageStep() {
                 <For each={option.features}>
                   {(feature) => (
                     <li>
-                      <FeatureView feature={feature} label={option.name} onFieldChange={editField} />
+                      <FeatureView feature={feature} label={option.name} onFieldChange={editField} setup />
                     </li>
                   )}
                 </For>

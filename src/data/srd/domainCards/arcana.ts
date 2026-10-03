@@ -16,7 +16,7 @@ export const arcana = [
     type: 'spell',
     recallCost: 1,
     text: 'At the beginning of a session, place a number of tokens equal to your Spellcast trait on this card.\nMake a Spellcast Roll against a target within Far range and spend any number of tokens to channel raw energy from within yourself to unleash against them. On a success, roll a number of d10s equal to the tokens you spent and deal that much magic damage to the target. Mark a Stress to replenish this card with tokens (up to your Spellcast trait).\nAt the end of each session, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Wall Walk',
@@ -57,7 +57,7 @@ export const arcana = [
     type: 'spell',
     recallCost: 1,
     text: 'Make a Spellcast Roll (15). On a success, place a number of tokens equal to your Agility on this card (minimum 1). When you make an action roll while flying, spend a token from this card. After the action that spends the last token is resolved, you descend to the ground directly below you.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Blink Out',
@@ -138,7 +138,7 @@ export const arcana = [
     type: 'spell',
     recallCost: 2,
     text: 'Make a Spellcast Roll (14). Once per long rest on a success, you create a layer of illusion over your body that makes it hard to tell exactly where you are. Mark any number of Stress to make that many additional layers. When an adversary makes an attack against you, roll a number of d6s equal to the number of layers currently active. If any roll a 5 or higher, one layer of the aura is destroyed and the attack fails. If all the results are 4 or lower, you take the damage and this spell ends.',
-    fields: [{ kind: 'counter', name: 'Layers', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Layers', value: 0 }],
   },
   {
     name: 'Earthquake',

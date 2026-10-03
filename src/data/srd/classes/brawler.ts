@@ -39,7 +39,7 @@ export const martialArtist = {
       fields: [
         { kind: 'pick', name: 'Known stances', collection: 'martialStances', value: [], count: 2 },
         { kind: 'text', name: 'Active stance', value: '' },
-        { kind: 'counter', name: 'Focus', value: 0, max: 6 },
+        { kind: 'counter', play: true, name: 'Focus', value: 0, max: 6 },
       ],
     },
   ],

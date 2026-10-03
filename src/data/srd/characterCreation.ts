@@ -9,7 +9,6 @@ export const startingValues = {
   experienceModifier: 2,
   experienceCount: 2,
   domainCardCount: 2,
-  goldHandfuls: 1,
 }
 
 export const loadoutLimit = 5

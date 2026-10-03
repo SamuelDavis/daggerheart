@@ -3,7 +3,8 @@ import { assign, modify } from '../../character/changes'
 import { useCharacterSession } from '../../character/session'
 import { ExperienceEditor } from '../../content/ExperienceEditor'
 import { creationGuidance, experienceExamples, startingValues } from '../../data/srd/characterCreation'
-import { Section, Toolbar } from '../../ui/layout'
+import { Section } from '../../ui/layout'
+import { Suggestions } from '../../ui/Suggestions'
 import { Guidance } from '../Guidance'
 
 export function ExperiencesStep() {
@@ -19,20 +20,14 @@ export function ExperiencesStep() {
         experiences={character().experiences}
         onChange={(experiences) => change(assign('experiences', experiences))}
       />
-      <Section heading="Examples">
+      <Section heading="Suggestions">
         <For each={Object.entries(experienceExamples)}>
           {([category, examples]) => (
-            <Section heading={category}>
-              <Toolbar aria-label={`${category} examples`}>
-                <For each={examples}>
-                  {(example) => (
-                    <button type="button" onClick={() => add(example)}>
-                      {example}
-                    </button>
-                  )}
-                </For>
-              </Toolbar>
-            </Section>
+            <Suggestions
+              label={category}
+              options={examples.filter((example) => !character().experiences.some(({ name }) => name === example))}
+              onPick={add}
+            />
           )}
         </For>
       </Section>

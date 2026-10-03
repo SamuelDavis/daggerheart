@@ -100,7 +100,7 @@ export const transformations = [
       {
         name: 'Feed',
         text: 'On a successful “Fangs” attack against a creature that can bleed, you can mark a Stress to feed. Place a number of tokens on this card equal to the number of Hit Points the target marks. You can hold up to 6 tokens at a time. Before you make an action roll, you can spend a token to make your Fear Die a d20. When you take a long rest, remove a token. While there are no tokens on this card, you make action and reaction rolls with disadvantage.',
-        fields: [{ kind: 'counter', name: 'Tokens', value: 0, max: 6 }],
+        fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0, max: 6 }],
       },
     ],
     questions: [

@@ -1,12 +1,10 @@
 import { loadoutLimit } from '../data/srd/characterCreation'
 import type { TraitName } from '../data/srd/traits'
 import { removeAt, replaceAt, replaceNode } from '../lib/immutable'
-import type { CardPlacement, Character, ClassProgress, OwnedItem, Prompt } from '../types/app'
+import type { CardPlacement, Character, ClassProgress, OwnedItem } from '../types/app'
 import type { Ancestry, Armor, CharacterClass, DomainCard, Item, Subclass, Weapon } from '../types/srd'
 
 export type Change = (character: Character) => Character
-
-type PromptList = 'appearance' | 'background' | 'connections'
 
 export const assign =
   <Key extends keyof Character>(key: Key, value: Character[Key]): Change =>
@@ -72,14 +70,6 @@ export const assignTraits = (values: Readonly<Record<string, number>>): Change =
       ) as Character['traits'],
   )
 
-export const setPrompt = (list: PromptList, prompt: string, response: string): Change =>
-  modify(list, (prompts): readonly Prompt[] => {
-    const others = prompts.filter((existing) => existing.prompt !== prompt)
-    const index = prompts.findIndex((existing) => existing.prompt === prompt)
-    if (!response) return others
-    const entry = { prompt, response }
-    return index === -1 ? [...prompts, entry] : prompts.map((existing, position) => (position === index ? entry : existing))
-  })
 
 export const addWeapon = (weapon: Weapon, equipped: boolean): Change =>
   modify('weapons', (weapons) => [...weapons, { ...weapon, equipped }])

@@ -12,14 +12,14 @@ export const hedge = {
     {
       name: 'Enchanted Talisman',
       text: 'Once per rest, you can imbue a small item with your protective essence. Spend any number of Hope to place an equal number of tokens on this card. When the person holding the talisman takes damage, spend a token to reduce the number of Hit Points they mark by one. Clear all tokens from this card when you take a rest.',
-      fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+      fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
     },
   ],
   specialization: [
     {
       name: 'Walk Between Worlds',
       text: 'During a moment of calm, make a Spellcast Roll (13). Once per rest on a success, you can mark a Stress to step beyond the veil of death and converse with any nearby spirits. Place a number of tokens equal to your Spellcast trait on this card and remove one each time a spirit answers a question. When the last token is removed or at the end of the scene, you return to the Mortal Realm in the same spot you left it.',
-      fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+      fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
     },
     { name: 'Vexing Malison', text: 'You have advantage on attacks against Hexed creatures.' },
   ],
@@ -27,7 +27,7 @@ export const hedge = {
     {
       name: 'Circle of Power',
       text: 'Once per rest, mark a circle on the ground outlining a Very Close area around you, and place a number of tokens equal to your Spellcast trait on this card. While within this circle, you and your allies gain a +2 bonus to damage thresholds, attack rolls, and Evasion. Remove a token each time you or an ally within the circle makes an action roll or evades an attack. This spell lasts until the last token is removed or you exit the circle.',
-      fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+      fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
     },
   ],
 } as const satisfies Subclass

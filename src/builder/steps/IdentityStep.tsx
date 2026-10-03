@@ -1,58 +1,33 @@
-import { For } from 'solid-js'
 import { paths } from '../../app/paths'
-import { assign, setPrompt } from '../../character/changes'
-import { useCharacterSession } from '../../character/session'
+import { assign } from '../../character/changes'
 import { NameField } from '../../character/NameField'
-import { srd } from '../../data/srd'
+import { useCharacterSession } from '../../character/session'
+import { descriptionPromptsFor } from '../../content/descriptionPrompts'
+import { PromptListEditor } from '../../content/PromptListEditor'
 import { creationGuidance } from '../../data/srd/characterCreation'
-import { findByName } from '../../data/srd/lookup'
-import type { DescriptionPrompt } from '../../types/srd'
-import { Field } from '../../ui/form'
+import { TextField } from '../../ui/fields'
 import { Section } from '../../ui/layout'
-import { SuggestionInput } from '../../ui/SuggestionInput'
 import { Guidance } from '../Guidance'
-
-const sharedPrompts = (): readonly DescriptionPrompt[] => {
-  const all = srd.guides.entries.flatMap(({ descriptionPrompts }) => descriptionPrompts)
-  return [...new Set(all.map(({ prompt }) => prompt))].map((prompt) => ({
-    prompt,
-    suggestions: [...new Set(all.filter((entry) => entry.prompt === prompt).flatMap(({ suggestions }) => suggestions))],
-  }))
-}
 
 export function IdentityStep() {
   const { character, change } = useCharacterSession()
-  const prompts = () => findByName(srd.guides.entries, character().classes[0]?.name)?.descriptionPrompts ?? sharedPrompts()
-  const responseTo = (prompt: string) => character().appearance.find((entry) => entry.prompt === prompt)?.response ?? ''
+  const prompts = () => descriptionPromptsFor(character().classes[0]?.name)
 
   return (
     <>
       <Guidance text={creationGuidance.identity} />
       <Section heading="Who are you?">
         <NameField pathFor={(name) => paths.build(name, 'identity')} />
-        <Field label="Pronouns">
-          {(control) => (
-            <input {...control} value={character().pronouns} onChange={(event) => change(assign('pronouns', event.currentTarget.value))} />
-          )}
-        </Field>
+        <TextField label="Pronouns" value={character().pronouns} onChange={(pronouns) => change(assign('pronouns', pronouns))} />
       </Section>
-      <Section heading="Character description">
-        <p>Choose one (or more) from each line, or write your own description.</p>
-        <For each={prompts()}>
-          {({ prompt, suggestions }) => (
-            <Field label={prompt}>
-              {(control) => (
-                <SuggestionInput
-                  {...control}
-                  value={responseTo(prompt)}
-                  suggestions={suggestions}
-                  onChange={(response) => change(setPrompt('appearance', prompt, response))}
-                />
-              )}
-            </Field>
-          )}
-        </For>
-      </Section>
+      <PromptListEditor
+        legend="Character description"
+        promptLabel="Detail"
+        prompts={character().appearance}
+        suggestedPrompts={prompts().map(({ prompt }) => prompt)}
+        responseSuggestions={(prompt) => prompts().find((entry) => entry.prompt === prompt)?.suggestions}
+        onChange={(appearance) => change(assign('appearance', appearance))}
+      />
     </>
   )
 }

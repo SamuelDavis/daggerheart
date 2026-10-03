@@ -10,7 +10,7 @@ import { List, Section } from '../ui/layout'
 import { PickerDialog } from '../ui/PickerDialog'
 import { ToggleButton } from '../ui/ToggleButton'
 import { EditDetails } from './EditDetails'
-import { TierFilter } from './TierFilter'
+import { TierFilter } from '../ui/TierFilter'
 
 export function ArmorList() {
   const { character, change } = useCharacterSession()

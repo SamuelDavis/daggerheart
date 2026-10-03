@@ -1,7 +1,7 @@
 import * as v from 'valibot'
 import { list, Modifier, Name, Ordinal } from '../schema'
 import { Damage } from './dice'
-import { Feature } from './feature'
+import { Excerpt } from './excerpt'
 
 export const BeastformStats = v.object({
   trait: Name,
@@ -21,6 +21,6 @@ export const Beastform = v.object({
   examples: list(Name),
   stats: v.optional(BeastformStats),
   advantages: list(Name),
-  features: list(Feature),
+  features: list(Excerpt),
 })
 export type Beastform = v.InferOutput<typeof Beastform>

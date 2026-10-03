@@ -1,46 +1,47 @@
 import * as v from 'valibot'
 import { Count, list, Name, Text } from '../schema'
+import { Beastform } from './beastform'
 import { Companion } from './companion'
 import { Die } from './dice'
+import { Excerpt } from './excerpt'
+
+const common = {
+  name: Name,
+  play: v.optional(v.boolean()),
+}
 
 const TextField = v.object({
   kind: v.literal('text'),
-  name: Name,
+  ...common,
   value: Text,
   suggestions: v.optional(list(Name)),
 })
 
 const CounterField = v.object({
   kind: v.literal('counter'),
-  name: Name,
+  ...common,
   value: Count,
   max: v.optional(Count),
 })
 
 const DieField = v.object({
   kind: v.literal('die'),
-  name: Name,
+  ...common,
   value: Die,
   face: v.optional(Count),
 })
 
 const ChoiceField = v.object({
   kind: v.literal('choice'),
-  name: Name,
+  ...common,
   value: list(Name),
   options: list(Name),
   count: Count,
 })
 
-export const Excerpt = v.object({
-  name: Name,
-  text: Text,
-})
-export type Excerpt = v.InferOutput<typeof Excerpt>
-
 const PickField = v.object({
   kind: v.literal('pick'),
-  name: Name,
+  ...common,
   collection: Name,
   value: list(Excerpt),
   count: v.optional(Count),
@@ -48,11 +49,25 @@ const PickField = v.object({
 
 const CompanionField = v.object({
   kind: v.literal('companion'),
-  name: Name,
+  ...common,
   value: Companion,
 })
 
-export const SheetField = v.variant('kind', [TextField, CounterField, DieField, ChoiceField, PickField, CompanionField])
+const BeastformField = v.object({
+  kind: v.literal('beastform'),
+  ...common,
+  value: v.optional(Beastform),
+})
+
+export const SheetField = v.variant('kind', [
+  TextField,
+  CounterField,
+  DieField,
+  ChoiceField,
+  PickField,
+  CompanionField,
+  BeastformField,
+])
 export type SheetField = v.InferOutput<typeof SheetField>
 
 export const Feature = v.object({

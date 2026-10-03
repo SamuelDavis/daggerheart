@@ -66,7 +66,7 @@ export const seraph = {
     {
       name: 'Prayer Dice',
       text: 'At the beginning of each session, roll a number of d4s equal to your subclass’s Spellcast trait and place them on your character sheet in the space provided. These are your Prayer Dice. You can spend any number of Prayer Dice to aid yourself or an ally within Far range. You can use a spent die’s value to reduce incoming damage, add to a roll’s result after the roll is made, or gain Hope equal to the result. At the end of each session, clear all unspent Prayer Dice.',
-      fields: [{ kind: 'text', name: 'Prayer Dice', value: '' }],
+      fields: [{ kind: 'text', play: true, name: 'Prayer Dice', value: '' }],
     },
   ],
   subclasses: [divineWielder.name, wingedSentinel.name],

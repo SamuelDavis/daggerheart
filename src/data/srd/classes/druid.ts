@@ -72,6 +72,7 @@ export const druid = {
     {
       name: 'Beastform',
       text: 'Mark a Stress to magically transform into a creature of your tier or lower from the Beastform list. You can drop out of this form at any time. While transformed, you can’t use weapons or cast spells from domain cards, but you can still use other features or abilities you have access to. Spells you cast before you transform stay active and last for their normal duration, and you can talk and communicate as normal. Additionally, you gain the Beastform’s features, add their Evasion bonus to your Evasion, and use the trait specified in their statistics for your attack. While you’re in a Beastform, your armor becomes part of your body and you mark Armor Slots as usual; when you drop out of a Beastform, those marked Armor Slots remain marked. If you mark your last Hit Point, you automatically drop out of this form.\nWhen you use your “Beastform” feature, choose a creature category of your tier or lower. At the GM’s discretion, you can describe yourself transforming into any animal that reasonably fits into that category.',
+      fields: [{ kind: 'beastform', play: true, name: 'Active Beastform' }],
     },
     {
       name: 'Wildtouch',

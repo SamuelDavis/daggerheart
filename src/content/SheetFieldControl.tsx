@@ -1,18 +1,23 @@
 import { createSignal, For, Match, Show, Switch } from 'solid-js'
 import { srd, type SrdCollection } from '../data/srd'
 import { removeAt } from '../lib/immutable'
-import { Die, type Excerpt, type SheetField } from '../types/srd'
+import { Die, type Beastform, type Excerpt, type SheetField } from '../types/srd'
 import { Dialog } from '../ui/Dialog'
+import { PickerDialog } from '../ui/PickerDialog'
+import { TierFilter } from '../ui/TierFilter'
 import { Field, Fieldset } from '../ui/form'
 import { Card, Grid, List } from '../ui/layout'
 import { NumberInput } from '../ui/NumberInput'
 import { SuggestionInput } from '../ui/SuggestionInput'
+import { tierOf } from '../character/rules'
+import { useCharacterSession } from '../character/session'
 import { CompanionEditor } from './CompanionEditor'
+import { BeastformCard } from './ContentCards'
 import { RichText } from './RichText'
 import './editors.css'
 
 type FieldOf<Kind extends SheetField['kind']> = Extract<SheetField, { kind: Kind }>
-type Props<Field extends SheetField = SheetField> = { field: Field; onChange: (field: Field) => void }
+type Props<Field extends SheetField = SheetField> = { field: Field; onChange: (field: Field) => void; setup?: boolean }
 
 const faces = (die: Die) => Number(die.slice(1))
 
@@ -65,7 +70,7 @@ function DieControl(props: Props<FieldOf<'die'>>) {
           </select>
         )}
       </Field>
-      <Show when={props.field.face !== undefined}>
+      <Show when={!props.setup && props.field.face !== undefined}>
         <Field label="Showing" description="0 when inactive">
           {(control) => (
             <NumberInput
@@ -166,6 +171,57 @@ function PickControl(props: Props<FieldOf<'pick'>>) {
   )
 }
 
+function BeastformControl(props: Props<FieldOf<'beastform'>>) {
+  const { character } = useCharacterSession()
+  const [choosing, setChoosing] = createSignal(false)
+  const [allTiers, setAllTiers] = createSignal(false)
+  const available = () => srd.beastforms.entries.filter(({ tier }) => allTiers() || tier <= tierOf(character().level))
+  const transform = (beastform: Beastform | undefined) => {
+    props.onChange({ ...props.field, value: beastform })
+    setChoosing(false)
+  }
+
+  return (
+    <Fieldset legend={props.field.name}>
+      <Show when={props.field.value} fallback={<p class="meta">Not transformed.</p>}>
+        {(beastform) => (
+          <BeastformCard
+            beastform={beastform()}
+            actions={
+              <button type="button" onClick={() => transform(undefined)}>
+                Drop out
+              </button>
+            }
+          />
+        )}
+      </Show>
+      <div>
+        <button type="button" onClick={() => setChoosing(true)}>
+          {props.field.value ? 'Change Beastform' : 'Choose a Beastform'}
+        </button>
+      </div>
+      <PickerDialog
+        open={choosing()}
+        onClose={() => setChoosing(false)}
+        heading="Choose a Beastform"
+        entries={available()}
+        filters={<TierFilter allTiers={allTiers()} onChange={setAllTiers} />}
+      >
+        {(beastform) => (
+          <BeastformCard
+            beastform={beastform}
+            actions={
+              <button type="button" onClick={() => transform(beastform)}>
+                Transform
+              </button>
+            }
+          />
+        )}
+      </PickerDialog>
+    </Fieldset>
+  )
+}
+
 const asKind = <Kind extends SheetField['kind']>(field: SheetField, kind: Kind) =>
   field.kind === kind ? (field as FieldOf<Kind>) : undefined
 
@@ -176,11 +232,16 @@ export function SheetFieldControl(props: Props) {
       <Match when={asKind(props.field, 'counter')}>
         {(field) => <CounterControl field={field()} onChange={props.onChange} />}
       </Match>
-      <Match when={asKind(props.field, 'die')}>{(field) => <DieControl field={field()} onChange={props.onChange} />}</Match>
+      <Match when={asKind(props.field, 'die')}>
+        {(field) => <DieControl field={field()} setup={props.setup} onChange={props.onChange} />}
+      </Match>
       <Match when={asKind(props.field, 'choice')}>
         {(field) => <ChoiceControl field={field()} onChange={props.onChange} />}
       </Match>
       <Match when={asKind(props.field, 'pick')}>{(field) => <PickControl field={field()} onChange={props.onChange} />}</Match>
+      <Match when={asKind(props.field, 'beastform')}>
+        {(field) => <BeastformControl field={field()} onChange={props.onChange} />}
+      </Match>
       <Match when={asKind(props.field, 'companion')}>
         {(field) => <CompanionEditor companion={field().value} onChange={(value) => props.onChange({ ...field(), value })} />}
       </Match>

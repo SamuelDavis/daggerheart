@@ -4,7 +4,10 @@ import { useMode } from '../../character/mode'
 import { useCharacterSession } from '../../character/session'
 import { ExperienceEditor } from '../../content/ExperienceEditor'
 import { formatModifier } from '../../content/format'
+import { descriptionPromptsFor } from '../../content/descriptionPrompts'
 import { PromptListEditor } from '../../content/PromptListEditor'
+import { srd } from '../../data/srd'
+import { findByName } from '../../data/srd/lookup'
 import type { Prompt } from '../../types/app'
 import { TextField } from '../../ui/fields'
 import { DescriptionList, List, Section } from '../../ui/layout'
@@ -37,6 +40,14 @@ function Answers(props: { prompts: readonly Prompt[] }) {
 export function StorySection() {
   const { character, change } = useCharacterSession()
   const mode = useMode()
+  const className = () => character().classes[0]?.name
+  const definition = () => findByName(srd.classes.entries, className())
+  const suggestionsFor = (key: PromptKey): readonly string[] =>
+    key === 'appearance'
+      ? descriptionPromptsFor(className()).map(({ prompt }) => prompt)
+      : ((key === 'background' ? definition()?.backgroundQuestions : definition()?.connectionQuestions) ?? [])
+  const descriptionSuggestions = (prompt: string) =>
+    descriptionPromptsFor(className()).find((entry) => entry.prompt === prompt)?.suggestions
 
   return (
     <>
@@ -73,6 +84,8 @@ export function StorySection() {
                 legend={heading}
                 promptLabel={promptLabel}
                 prompts={character()[key]}
+                suggestedPrompts={suggestionsFor(key)}
+                responseSuggestions={key === 'appearance' ? descriptionSuggestions : undefined}
                 onChange={(prompts) => change(assign(key, prompts))}
               />
             </Show>

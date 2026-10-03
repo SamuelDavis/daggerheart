@@ -24,7 +24,7 @@ export const midnight = [
     type: 'spell',
     recallCost: 0,
     text: 'When you have a few minutes to prepare, you can mark a Stress to don the facade of any humanoid you can picture clearly in your mind. While disguised, you have advantage on Presence Rolls to avoid scrutiny.\nPlace a number of tokens equal to your Spellcast trait on this card. When you take an action while disguised, spend a token from this card. After the action that spends the last token is resolved, the disguise drops.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Midnight Spirit',
@@ -105,7 +105,7 @@ export const midnight = [
     type: 'spell',
     recallCost: 0,
     text: 'When you have a few minutes of silence to focus, you can mark a Stress to change the appearance of all willing creatures within Close range. Their new forms must share a general body structure and size, and can be somebody or something you’ve seen before or entirely fabricated. A disguised creature has advantage on Presence Rolls to avoid scrutiny.\nActivate a Countdown (8). It ticks down as a consequence the GM chooses. When it triggers, the disguise drops.',
-    fields: [{ kind: 'counter', name: 'Countdown', value: 8, max: 8 }],
+    fields: [{ kind: 'counter', play: true, name: 'Countdown', value: 8, max: 8 }],
   },
   {
     name: 'Midnight-Touched',
@@ -138,7 +138,7 @@ export const midnight = [
     type: 'spell',
     recallCost: 1,
     text: 'When you take magic damage, place tokens equal to the number of Hit Points you marked on this card. You can store a number of tokens equal to your Spellcast trait.\nWhen you make a successful attack against a target, you can spend any number of tokens to add a d6 for each token spent to your damage roll.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Night Terror',
@@ -155,7 +155,7 @@ export const midnight = [
     type: 'ability',
     recallCost: 1,
     text: 'Choose a target within Far range. When you succeed on an action roll against them that doesn’t result in making a damage roll, place a token on this card. When you deal damage to this target, spend any number of tokens to add a d12 for each token spent to your damage roll. You can only hold Twilight Toll on one creature at a time.\nWhen you choose a new target or take a rest, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Eclipse',

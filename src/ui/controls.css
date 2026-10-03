@@ -64,3 +64,9 @@
     font-size: var(--step--1);
   }
 }
+
+@layer components {
+  .suggestions {
+    --gap: var(--space-3xs);
+  }
+}

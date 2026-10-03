@@ -14,5 +14,7 @@ export const describeField = (field: SheetField): string => {
       return field.value.map(({ name }) => name).join(', ') || '—'
     case 'companion':
       return field.value.name || '—'
+    case 'beastform':
+      return field.value?.name ?? 'Not transformed'
   }
 }

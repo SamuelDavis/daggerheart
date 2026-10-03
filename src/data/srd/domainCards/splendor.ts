@@ -96,7 +96,7 @@ export const splendor = [
     type: 'spell',
     recallCost: 2,
     text: 'After a long rest, place a number of tokens equal to your Spellcast trait on this card. Touch a creature and spend any number of tokens to clear 2 Hit Points or 2 Stress for each token spent.\nYou can also spend a token from this card when touching a creature to clear the Vulnerable condition or heal a physical or magical ailment (the GM might require additional tokens depending on the strength of the ailment).\nWhen you take a long rest, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Zone of Protection',

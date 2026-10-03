@@ -35,7 +35,7 @@ export const poisonersGuild = {
     {
       name: 'Toxic Concoctions',
       text: 'Mark a Stress to place 1d4+1 tokens on this card. When you make a successful weapon attack, you can spend a token to afflict the target with a poison. You know these poisons:\n• Ghost Petal: The target becomes temporarily Vulnerable.\n• Grave Spore: The target must also mark a Stress.\n• Leech Weed: You deal an extra 1d6 damage on this attack.\nWhen you take a long rest, clear all unspent tokens.',
-      fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+      fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
     },
   ],
   specialization: [

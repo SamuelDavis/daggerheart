@@ -31,7 +31,7 @@ export const callOfTheSlayer = {
     {
       name: 'Slayer',
       text: 'You gain a pool of dice called Slayer Dice. On a roll with Hope, you can place a d6 on this card instead of gaining a Hope, adding the die to the pool. You can store a number of Slayer Dice equal to your Proficiency. When you make an attack roll or damage roll, you can spend any number of these Slayer Dice, rolling them and adding their result to the roll. At the end of each session, clear any unspent Slayer Dice on this card and gain a Hope per die cleared.',
-      fields: [{ kind: 'counter', name: 'Slayer Dice', value: 0 }],
+      fields: [{ kind: 'counter', play: true, name: 'Slayer Dice', value: 0 }],
     },
   ],
   specialization: [

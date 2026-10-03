@@ -6,8 +6,8 @@ import { FeatureView } from '../../content/FeatureView'
 import { srd } from '../../data/srd'
 import { creationGuidance } from '../../data/srd/characterCreation'
 import { findAllByName, findByName } from '../../data/srd/lookup'
-import { Grid, List, Section } from '../../ui/layout'
-import { ToggleButton } from '../../ui/ToggleButton'
+import { List, Section } from '../../ui/layout'
+import { Chooser } from '../Chooser'
 import { Guidance } from '../Guidance'
 
 export function ClassStep() {
@@ -19,52 +19,24 @@ export function ClassStep() {
   return (
     <>
       <Guidance text={creationGuidance.class} />
-      <Section heading="Class">
-        <Grid>
-          <For each={srd.classes.entries}>
-            {(characterClass) => (
-              <li>
-                <ClassCard
-                  characterClass={characterClass}
-                  actions={
-                    <ToggleButton
-                      pressed={progress()?.name === characterClass.name}
-                      onClick={() => change(chooseClass(characterClass))}
-                      label={`Choose ${characterClass.name}`}
-                    >
-                      Select
-                    </ToggleButton>
-                  }
-                />
-              </li>
-            )}
-          </For>
-        </Grid>
-      </Section>
+      <Chooser
+        id="choose-class"
+        heading="Class"
+        options={srd.classes.entries}
+        selected={progress()?.name}
+        onSelect={(characterClass) => change(chooseClass(characterClass))}
+        card={(characterClass, actions) => <ClassCard characterClass={characterClass} actions={actions} />}
+      />
       <Show when={definition()}>
         {(characterClass) => (
-          <Section heading={`${characterClass().name} subclass`}>
-            <Grid>
-              <For each={findAllByName(srd.subclasses.entries, characterClass().subclasses)}>
-                {(subclass) => (
-                  <li>
-                    <SubclassCard
-                      subclass={subclass}
-                      actions={
-                        <ToggleButton
-                          pressed={progress()?.subclass?.name === subclass.name}
-                          onClick={() => change(chooseSubclass(subclass))}
-                          label={`Choose ${subclass.name}`}
-                        >
-                          Select
-                        </ToggleButton>
-                      }
-                    />
-                  </li>
-                )}
-              </For>
-            </Grid>
-          </Section>
+          <Chooser
+            id="choose-subclass"
+            heading={`${characterClass().name} subclass`}
+            options={findAllByName(srd.subclasses.entries, characterClass().subclasses)}
+            selected={progress()?.subclass?.name}
+            onSelect={(subclass) => change(chooseSubclass(subclass))}
+            card={(subclass, actions) => <SubclassCard subclass={subclass} actions={actions} />}
+          />
         )}
       </Show>
       <Show when={progress()}>
@@ -75,21 +47,21 @@ export function ClassStep() {
               <Show when={chosen().hopeFeature}>
                 {(hopeFeature) => (
                   <li>
-                    <FeatureView feature={hopeFeature()} label="Hope feature" onFieldChange={editField} />
+                    <FeatureView feature={hopeFeature()} label="Hope feature" onFieldChange={editField} setup />
                   </li>
                 )}
               </Show>
               <For each={chosen().features}>
                 {(feature) => (
                   <li>
-                    <FeatureView feature={feature} label="Class feature" onFieldChange={editField} />
+                    <FeatureView feature={feature} label="Class feature" onFieldChange={editField} setup />
                   </li>
                 )}
               </For>
               <For each={chosen().subclass?.foundation}>
                 {(feature) => (
                   <li>
-                    <FeatureView feature={feature} label={`${chosen().subclass?.name} foundation`} onFieldChange={editField} />
+                    <FeatureView feature={feature} label={`${chosen().subclass?.name} foundation`} onFieldChange={editField} setup />
                   </li>
                 )}
               </For>

@@ -14,8 +14,10 @@ export function FeatureView(props: {
   label?: string
   onFieldChange?: FieldEditor
   onChange?: (feature: Feature) => void
+  setup?: boolean
 }) {
   const mode = useMode()
+  const fields = () => (props.feature.fields ?? []).filter((field) => !(props.setup && field.play))
   return (
     <Section
       class="feature"
@@ -35,8 +37,10 @@ export function FeatureView(props: {
       <Show when={mode() === 'print' && props.feature.fields}>{(fields) => <FieldValues fields={fields()} />}</Show>
       <Show when={mode() !== 'print' && props.onFieldChange}>
         {(onFieldChange) => (
-          <For each={props.feature.fields}>
-            {(field) => <SheetFieldControl field={field} onChange={(next) => onFieldChange()(field, next)} />}
+          <For each={fields()}>
+            {(field) => (
+              <SheetFieldControl field={field} setup={props.setup} onChange={(next) => onFieldChange()(field, next)} />
+            )}
           </For>
         )}
       </Show>

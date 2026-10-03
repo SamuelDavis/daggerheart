@@ -16,7 +16,7 @@ export const dread = [
     type: 'spell',
     recallCost: 1,
     text: 'Once per rest, you can mark a Stress to encase yourself in shadowy energy. When you do, place a number of tokens on this card equal to the number of Fear in the GM’s pool. After an attack roll is made against you, you can spend any number of tokens to give the result a −1 penalty per token spent.\nAt the end of the scene, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Voice of Dread',
@@ -129,7 +129,7 @@ export const dread = [
     type: 'spell',
     recallCost: 2,
     text: 'Make a Spellcast Roll (14). Once per long rest on a success, you can summon fiends that surround and move with you. Place 8 tokens on this card. When you deal damage to a target within Very Close range, you can spend any number of tokens to add 1d8 for each token spent to your damage roll. Additionally, when you take damage, you can spend any number of tokens to reduce the damage by 1d8 for each token spent. Each time you spend a token, a fiend acts on your behalf, then disappears.\nWhen you take a rest, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0, max: 8 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0, max: 8 }],
   },
   {
     name: 'Eldritch Flesh',

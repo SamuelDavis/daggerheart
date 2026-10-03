@@ -80,7 +80,7 @@ export const sage = [
     type: 'spell',
     recallCost: 1,
     text: 'Once per rest, spend a Hope to sprout thorns all over your body. When you do, place a number of tokens equal to your Spellcast trait on this card. When you take damage, you can spend any number of tokens to roll that number of d6s. Add the results together and reduce the incoming damage by that amount. If you’re within Melee range of the attacker, deal that amount of damage back to them.\nWhen you take a rest, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Wild Fortress',
@@ -89,7 +89,7 @@ export const sage = [
     type: 'spell',
     recallCost: 1,
     text: 'Make a Spellcast Roll (13). On a success, spend 2 Hope to grow a natural barricade in the shape of a dome that you and one ally can take cover within. While inside the dome, a creature can’t be targeted by attacks and can’t make attacks. Attacks made against the dome automatically succeed. The dome has the following damage thresholds and lasts until it marks 3 Hit Points. Place tokens on this card to represent marking Hit Points.\nThresholds: 15/30',
-    fields: [{ kind: 'counter', name: 'Hit Points', value: 0, max: 3 }],
+    fields: [{ kind: 'counter', play: true, name: 'Hit Points', value: 0, max: 3 }],
   },
   {
     name: 'Conjured Steeds',
@@ -131,7 +131,7 @@ export const sage = [
     type: 'spell',
     recallCost: 2,
     text: 'Make a Spellcast Roll (13). On a success, spend any number of Hope to create an equal number of small forest sprites who appear at points you choose within Far range, providing the following benefits:\n• Your allies gain a +3 bonus to attack rolls against adversaries within Melee range of a sprite.\n• An ally who marks an Armor Slot while within Melee range of a sprite can mark an additional Armor Slot.\nA sprite vanishes after granting a benefit or taking any damage.',
-    fields: [{ kind: 'counter', name: 'Sprites', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Sprites', value: 0 }],
   },
   {
     name: 'Rejuvenation Barrier',
@@ -148,7 +148,7 @@ export const sage = [
     type: 'ability',
     recallCost: 2,
     text: 'After a long rest, place a number of tokens equal to the number of Sage domain cards in your loadout and vault on this card.\nWhen you would make a Spellcast Roll, you can spend any number of tokens after the roll to gain a +1 bonus for each token spent.\nWhen you critically succeed on a Spellcast Roll for a Sage domain spell, gain a token.\nWhen you take a long rest, clear all unspent tokens.',
-    fields: [{ kind: 'counter', name: 'Tokens', value: 0 }],
+    fields: [{ kind: 'counter', play: true, name: 'Tokens', value: 0 }],
   },
   {
     name: 'Plant Dominion',

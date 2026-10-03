@@ -124,7 +124,7 @@ export const warlock = {
     {
       name: 'Favor',
       text: 'You start with 3 Favor. You can use a downtime move to show tribute to your patron. Describe how and gain Favor equal to your Spellcast trait. Additionally, when you succeed on an action roll with Hope, you can choose to gain a Favor instead of a Hope.\nNote: The maximum Favor you can hold at one time is 6.',
-      fields: [{ kind: 'counter', name: 'Favor', value: 3, max: 6 }],
+      fields: [{ kind: 'counter', play: true, name: 'Favor', value: 3, max: 6 }],
     },
   ],
   subclasses: [pactOfTheEndless.name, pactOfTheWrathful.name],

@@ -246,7 +246,7 @@ export function LevelUpFlow(props: { level: number; includeThresholds: boolean }
               <For each={revisit()}>
                 {(feature) => (
                   <li>
-                    <FeatureView feature={feature} onFieldChange={(field, next) => change(replace(field, next))} />
+                    <FeatureView feature={feature} onFieldChange={(field, next) => change(replace(field, next))} setup />
                   </li>
                 )}
               </For>
