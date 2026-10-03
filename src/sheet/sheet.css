@@ -1,0 +1,166 @@
+@layer components {
+  .track {
+    --gap: var(--space-2xs);
+  }
+
+  .track legend small {
+    font-weight: 400;
+  }
+
+  .boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+  }
+
+  .box {
+    inline-size: var(--touch-target);
+    block-size: var(--touch-target);
+    padding: 0;
+  }
+
+  .box[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .box:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+
+  .sheet {
+    container-type: inline-size;
+  }
+
+  .sheet-tabs ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sheet-tabs a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    padding-inline: var(--space-xs);
+    border: var(--border);
+    border-radius: 999px;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .sheet-tabs a[aria-current='true'] {
+    border-color: var(--accent);
+    font-weight: 650;
+  }
+
+  .sheet-sections {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  @container (width < 60rem) {
+    .sheet-sections > [data-active='false'] {
+      display: none;
+    }
+  }
+
+  @container (width >= 60rem) {
+    .sheet-tabs {
+      display: none;
+    }
+
+    .sheet-sections {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .sheet-sections > .wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .traits {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(9rem, 100%), 1fr));
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trait {
+    display: grid;
+    justify-items: center;
+    padding: var(--space-2xs);
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    text-align: center;
+  }
+
+  .trait output {
+    font-size: var(--step-2);
+    font-weight: 700;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
+    gap: var(--space-2xs);
+    margin: 0;
+  }
+
+  .stat {
+    padding: var(--space-2xs);
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    text-align: center;
+  }
+
+  .stat dd {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 700;
+  }
+}
+
+@layer print {
+  @media print {
+    :root {
+      font-size: 10pt;
+    }
+
+    .sheet-sections {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-s);
+    }
+
+    .sheet-sections > .wide {
+      grid-column: 1 / -1;
+    }
+
+    .box {
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      background: none;
+    }
+
+    .box[aria-pressed='true']::after {
+      content: '✕';
+    }
+
+    .card,
+    .trait,
+    .stat {
+      background: none;
+    }
+
+    .page {
+      max-inline-size: none;
+      padding: 0;
+    }
+  }
+}

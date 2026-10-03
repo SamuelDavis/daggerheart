@@ -1,0 +1,37 @@
+@layer components {
+  .page {
+    --gap: var(--space-l);
+    padding-block: var(--space-m) var(--space-xl);
+  }
+
+  .card {
+    --gap: var(--space-xs);
+    padding: var(--space-s);
+    border: var(--border);
+    border-block-start: 0.25rem solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+}
+
+@layer components {
+  .meta {
+    font-size: var(--step--1);
+    color: var(--color-muted);
+  }
+
+  .card:has(.toggle[aria-pressed='true']) {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+}
+
+@layer components {
+  .tag {
+    padding: var(--space-3xs) var(--space-2xs);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-size: var(--step--1);
+    color: var(--accent);
+  }
+}

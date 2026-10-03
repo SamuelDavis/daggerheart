@@ -1,0 +1,6 @@
+@layer components {
+  .done {
+    color: var(--accent);
+    font-weight: 600;
+  }
+}

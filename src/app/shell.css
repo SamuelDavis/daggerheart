@@ -1,0 +1,46 @@
+@layer components {
+  .skip-link {
+    position: absolute;
+    inset-inline-start: var(--space-s);
+    inset-block-start: calc(-1 * var(--touch-target) * 2);
+  }
+
+  .skip-link:focus {
+    inset-block-start: var(--space-s);
+  }
+
+  .app-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    padding-block: var(--space-2xs);
+    border-block-end: var(--border);
+    background: var(--color-surface);
+  }
+
+  .app-header > .cluster {
+    justify-content: space-between;
+  }
+
+  .app-header select {
+    inline-size: auto;
+  }
+
+  .app-header a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--touch-target);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .app-header a[aria-current='page'] {
+    text-decoration: underline;
+  }
+
+  .banner {
+    justify-content: space-between;
+    padding-block: var(--space-2xs);
+    border-block-end: var(--border);
+  }
+}

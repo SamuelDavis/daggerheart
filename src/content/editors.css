@@ -1,0 +1,26 @@
+@layer components {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-2xs) var(--space-s);
+  }
+
+  .row > .field:first-child {
+    flex: 1 1 12rem;
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-block-size: var(--touch-target);
+    font-weight: 400;
+  }
+
+  .checkbox input {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    accent-color: var(--accent);
+  }
+}

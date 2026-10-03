@@ -1,0 +1,76 @@
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', Consolas, monospace;
+
+    --step--1: clamp(0.83rem, 0.8rem + 0.15vw, 0.9rem);
+    --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+    --step-1: clamp(1.2rem, 1.13rem + 0.35vw, 1.4rem);
+    --step-2: clamp(1.44rem, 1.32rem + 0.6vw, 1.75rem);
+    --step-3: clamp(1.73rem, 1.54rem + 0.95vw, 2.2rem);
+
+    --space-3xs: 0.25rem;
+    --space-2xs: 0.5rem;
+    --space-xs: 0.75rem;
+    --space-s: 1rem;
+    --space-m: 1.5rem;
+    --space-l: 2rem;
+    --space-xl: 3rem;
+
+    --measure: 68ch;
+    --radius: 0.5rem;
+    --border: 1px solid var(--color-border);
+    --touch-target: 2.75rem;
+
+    --color-canvas: light-dark(oklch(0.98 0.006 80), oklch(0.17 0.01 280));
+    --color-surface: light-dark(oklch(1 0 0), oklch(0.22 0.012 280));
+    --color-text: light-dark(oklch(0.22 0.012 280), oklch(0.94 0.006 80));
+    --color-muted: light-dark(oklch(0.47 0.012 280), oklch(0.74 0.01 280));
+    --color-border: light-dark(oklch(0.86 0.01 280), oklch(0.36 0.014 280));
+    --color-brand: light-dark(oklch(0.5 0.16 15), oklch(0.76 0.12 15));
+    --color-danger: light-dark(oklch(0.5 0.19 28), oklch(0.74 0.15 28));
+
+    --accent: var(--color-brand);
+  }
+
+  :root[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  [data-domain='Arcana'] {
+    --accent: light-dark(oklch(0.48 0.17 305), oklch(0.76 0.13 305));
+  }
+  [data-domain='Blade'] {
+    --accent: light-dark(oklch(0.5 0.19 25), oklch(0.74 0.15 25));
+  }
+  [data-domain='Bone'] {
+    --accent: light-dark(oklch(0.48 0.03 80), oklch(0.8 0.03 80));
+  }
+  [data-domain='Codex'] {
+    --accent: light-dark(oklch(0.48 0.14 255), oklch(0.76 0.11 255));
+  }
+  [data-domain='Dread'] {
+    --accent: light-dark(oklch(0.42 0.12 340), oklch(0.72 0.12 340));
+  }
+  [data-domain='Grace'] {
+    --accent: light-dark(oklch(0.52 0.17 355), oklch(0.78 0.12 355));
+  }
+  [data-domain='Midnight'] {
+    --accent: light-dark(oklch(0.4 0.1 275), oklch(0.74 0.09 275));
+  }
+  [data-domain='Sage'] {
+    --accent: light-dark(oklch(0.48 0.13 145), oklch(0.76 0.13 145));
+  }
+  [data-domain='Splendor'] {
+    --accent: light-dark(oklch(0.52 0.12 85), oklch(0.82 0.13 90));
+  }
+  [data-domain='Valor'] {
+    --accent: light-dark(oklch(0.52 0.16 50), oklch(0.78 0.13 55));
+  }
+}
