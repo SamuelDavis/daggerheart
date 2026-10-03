@@ -1,0 +1,1 @@
+@layer components{.edit-details>summary{min-block-size:var(--touch-target);cursor:pointer;color:var(--accent);align-items:center;display:flex}}
